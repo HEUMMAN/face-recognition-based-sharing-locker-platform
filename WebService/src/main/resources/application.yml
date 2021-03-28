@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: jdbc:mysql://aws2-rds.c27gjtnku3g9.ap-northeast-2.rds.amazonaws.com:3306/fabinetDB
+    username: llshl
+    password: jh18821882
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+
+  servlet:
+    multipart:
+      enabled: true
+      location: ${java.io.tmpdir}
+      max-file-size: 1MB
+      max-request-size: 1MB
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        #       show_sql: true
+        format_sql: true
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.type: trace
