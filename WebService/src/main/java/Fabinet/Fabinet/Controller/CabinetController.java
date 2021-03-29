@@ -1,6 +1,9 @@
 package Fabinet.Fabinet.Controller;
 
+import Fabinet.Fabinet.Domain.Cabinet;
+import Fabinet.Fabinet.Domain.Member;
 import Fabinet.Fabinet.Service.CabinetService;
+import Fabinet.Fabinet.Service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpRequest;
@@ -15,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,6 +27,8 @@ import java.io.IOException;
 public class CabinetController {
 
     private final CabinetService cabinetService;
+    private final MemberService memberService;
+    private long passedTime;
 
     //정산페이지 이전에 로그인 돼있는지 확인
     @GetMapping("/isPaymentLogined")
@@ -45,22 +52,43 @@ public class CabinetController {
     public String toPayment(Model model, HttpServletRequest request){
         HttpSession session = request.getSession();
         log.info("정산확인페이지로 이동2");
-        long passedTime = cabinetService.getBill(session.getAttribute("loginMemberId"));
+        Member member = memberService.findOne((String)session.getAttribute("loginMemberId"));
+        passedTime = cabinetService.getBill(member);    //이거 전역변수로 했기때문에 초기화 주의해야함
         //넘어갈때 해당 회원이 지불해야할 돈을 여기서 계산한 후 보낸다
         // 서비스단에 요금 정산하는 함수 만들자 그거를 여기서도 호출하고 doPayment에서도 호출하자
-        System.out.println("passedTime: "+passedTime);
-        model.addAttribute("payMoney",passedTime);
+        System.out.println("사용한 시간: "+passedTime*0.001+"초");
+        model.addAttribute("payMoney",passedTime*0.001541666);
         System.out.println("결제할 금액: "+passedTime*0.001541666);
         return "checkBill";
     }
 
     @PostMapping("/doPayment")
-    public String doPayment(@RequestParam int money, HttpServletRequest request){
-        HttpSession session = request.getSession();
-        long passedTime = cabinetService.getBill(session.getAttribute("loginMemberId"));
-        //3시간에 천원 => 1ms에 0.001541666원
-        System.out.println("결제할 금액: "+passedTime*0.001541666);    //이거 에러뜬다
+    public String doPayment(HttpServletRequest request, Model model){
+        System.out.println("결제 API 호출");
+        System.out.println("결제할 금액: "+(int)(passedTime*0.001541666));
+        model.addAttribute("money",(int)(passedTime*0.001541666));
         log.info("결제 API 페이지 이동");
         return "payment";
+    }
+
+    //선택한 사물함 정보 받아서 DB반영
+    @PostMapping("/chooseCabinet")
+    public String chooseCabinet(@RequestParam(value="select1") String select1,
+                                @RequestParam(value="select2") String select2,
+                                @RequestParam(value="select3") String select3,HttpServletRequest request){
+        System.out.println("select1: "+select1);
+        System.out.println("select2: "+select2);
+        System.out.println("select3: "+select3);
+
+        HttpSession session = request.getSession();
+        String sessionId = (String)session.getAttribute("loginMemberId");
+
+        Cabinet cabinet = new Cabinet();
+        cabinet.setName(select1+"-"+select2+"-"+select3);
+        cabinet.setMember(memberService.findOne(sessionId));
+        cabinet.setStartTime(LocalDateTime.now());
+        cabinetService.chooseCanibet(cabinet);
+
+        return "redirect:/";
     }
 }
