@@ -55,7 +55,7 @@ public class CabinetController {
         Member member = memberService.findOne((String)session.getAttribute("loginMemberId"));
         passedTime = cabinetService.getBill(member);    //이거 전역변수로 했기때문에 초기화 주의해야함
         //넘어갈때 해당 회원이 지불해야할 돈을 여기서 계산한 후 보낸다
-        // 서비스단에 요금 정산하는 함수 만들자 그거를 여기서도 호출하고 doPayment에서도 호출하자
+        // 서비스단에 요금 정산하는 함수 만들자 그거를 여기서도 호출하고 doPayment에서도 호출해야함
         System.out.println("사용한 시간: "+passedTime*0.001+"초");
         model.addAttribute("payMoney",passedTime*0.001541666);
         System.out.println("결제할 금액: "+passedTime*0.001541666);
