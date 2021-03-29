@@ -41,29 +41,32 @@
             </h2>
             <div class="ui large form">
                 <div class="ui stacked segment">
-                    <table class="ui celled table">
-                        <thead>
-                            <tr>
-                                <select id="select1" onchange="itemChange()">
-                                    <option>A동</option>
-                                    <option>B동</option>
-                                    <option>D동</option>
-                                    <option>E동</option>
-                                    <option>산융</option>
-                                </select>
+                    <form action="/chooseCabinet" method="post">
+                        <table class="ui celled table">
+                            <thead>
+                                <tr>
+                                    <select id="select1", name="select1" onchange="itemChange()">
+                                        <option>A동</option>
+                                        <option>B동</option>
+                                        <option>D동</option>
+                                        <option>E동</option>
+                                        <option>산융</option>
+                                    </select>
 
-                                <select id="select2" onchange="itemChange2()">
-                                </select>
+                                    <select id="select2", name="select2" onchange="itemChange2()">
+                                    </select>
 
-                                <select id="select3">
-                                </select>
-                            </tr>
-                        </thead>
-                        <tbody id="list">
-                        </tbody>
-                    </table>
-                    <a href="/write_bbs"><button class="ui fluid large teal submit button">선택완료</button></a>
-                    <!--선택 완료 누르면 선택정보 재확인 및 선불 후불 결제 페이지로 넘어가자-->
+                                    <select id="select3", name="select3">
+                                    </select>
+                                </tr>
+                            </thead>
+                            <tbody id="list">
+                            </tbody>
+                        </table>
+                        <%--<a href="/chooseCabinet"><button class="ui fluid large teal submit button">선택완료</button></a>--%>
+                        <input type="submit" class="ui fluid large teal submit button" value="선택완료">
+                        <!--선택 완료 누르면 선택정보 재확인 및 선불 후불 결제 페이지로 넘어가자-->
+                    </form>
                 </div>
 
                 <div class="ui error message"></div>
@@ -93,6 +96,24 @@
     <!-- js 가져오기 -->
     <script src="/jquery3.3.1.min.js"></script>
     <script src="/semantic.min.js"></script>
+
+    <%--<script type="text/javascript">
+        var target = document.getElementById("select1");
+        alert('선택된 옵션 text 값=' + target.options[target.selectedIndex].text);     // 옵션 text 값
+        alert('선택된 옵션 value 값=' + target.options[target.selectedIndex].value);     // 옵션 value 값
+    </script>
+    <script type="text/javascript">
+        var target = document.getElementById("select2");
+        alert('선택된 옵션 text 값=' + target.options[target.selectedIndex].text);     // 옵션 text 값
+        alert('선택된 옵션 value 값=' + target.options[target.selectedIndex].value);     // 옵션 value 값
+    </script>
+    <script type="text/javascript">
+        var target = document.getElementById("select3");
+        alert('선택된 옵션 text 값=' + target.options[target.selectedIndex].text);     // 옵션 text 값
+        alert('선택된 옵션 value 값=' + target.options[target.selectedIndex].value);     // 옵션 value 값
+    </script>--%>
+
+
 
     <script>
         //아 어자피 DB 조회해서 사용가능한 사물함만 보이도록 해야한다.

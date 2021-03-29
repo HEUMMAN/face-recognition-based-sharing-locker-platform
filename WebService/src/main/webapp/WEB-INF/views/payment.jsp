@@ -65,6 +65,7 @@
             </div>
             <div class="ui large form">
                 <div class="ui stacked segment">
+                    ${money}원 결제
                     <a href="/toBoardList"><button class="ui fluid large teal submit button">페비넷 게시판</button></a>
                     <br>
                     <a href="/toChooseCabinet"><button class="ui fluid large teal submit button" id="go_cabinet">사물함 선택</button></a>
@@ -99,13 +100,14 @@
     <script src="/semantic.min.js"></script>
 
     <script>
+        var money = '${money}';
         IMP.init('imp50322150');
         IMP.request_pay({
             pg : 'html5_inicis',
             pay_method : 'card',
             merchant_uid : 'merchant_' + new Date().getTime(),
             name : '주문명:결제테스트',
-            amount : 14000,
+            amount : money,
             buyer_email : 'iamport@siot.do',
             buyer_name : '구매자이름',
             buyer_tel : '010-1234-5678',

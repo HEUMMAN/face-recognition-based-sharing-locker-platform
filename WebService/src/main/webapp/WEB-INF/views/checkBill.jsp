@@ -72,7 +72,9 @@
                     예시 가격: 10
                     서버에서 넘어온 가격: ${payMoney}
                     <br>
-                        <a href=""><div class="ui fluid large teal submit button" id="doPayment">정산하기</div></a>
+                        <form method="post", action="/doPayment">
+                            <input type="submit" class="ui fluid large teal submit button" value="정산하기">
+                        </form>
                 </div>
                 <div class="ui error message"></div>
             </div>
