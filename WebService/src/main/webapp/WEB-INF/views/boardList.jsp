@@ -59,7 +59,7 @@
                     <%=userId %>님
                 </div>
                 <div class="ui stacked segment">
-                    <a href="/write_bbs"><button class="ui fluid large teal submit button">게시글 작성하기</button></a>
+                    <a href="/boards/createBoard"><button class="ui fluid large teal submit button">게시글 작성하기</button></a>
                     <table class="ui celled table">
                         <thead>
                             <tr>

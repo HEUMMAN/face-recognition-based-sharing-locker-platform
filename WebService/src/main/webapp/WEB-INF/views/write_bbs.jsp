@@ -58,6 +58,7 @@
     <!-- js 가져오기 -->
     <script src="/jquery3.3.1.min.js"></script>
     <script src="/semantic.min.js"></script>
+
     <script>
         $(document).ready(function() {
             $("#write_bbs").click(function() {
@@ -76,7 +77,7 @@
 
                 $.ajax({
                     type: "post",
-                    url: "createBoard",
+                    url: "/createBoard",
                     data: json,
                     success: function(data) {
                         switch (Number(data)) {
@@ -86,7 +87,7 @@
                                 break;
                             case 0:
 								alert("정상적으로 등록이 되었습니다.");
-                                window.location.href = "/toBoardList";
+                                window.location.href = "/boards";
                                 break;
 
                             default:

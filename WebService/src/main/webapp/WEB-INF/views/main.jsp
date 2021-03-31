@@ -67,7 +67,7 @@
             </div>
             <div class="ui large form">
                 <div class="ui stacked segment">
-                    <a href="/toBoardList"><button class="ui fluid large teal submit button">페비넷 게시판</button></a>
+                    <a href="/boards"><button class="ui fluid large teal submit button">페비넷 게시판</button></a>
                     <br>
                     <a href="/toChooseCabinet"><button class="ui fluid large teal submit button" id="go_cabinet">사물함 선택</button></a>
                     <br>
