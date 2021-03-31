@@ -1,5 +1,6 @@
 package Fabinet.Fabinet.Controller;
 
+import Fabinet.Fabinet.Config.SecurityUtil;
 import Fabinet.Fabinet.Domain.Image;
 import Fabinet.Fabinet.Domain.Member;
 import Fabinet.Fabinet.Service.ImageService;
@@ -15,10 +16,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,35 +34,12 @@ public class LoginController {
     private final MemberService memberService;
     private final ImageService imageService;
 
-    BasicAWSCredentials awsCreds = new BasicAWSCredentials("key", "key");
+    BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIAID7ORZRGXAVUBEXA", "AXgZBzrc/y4KzejD35GLZomcjYkm/dti40s642hE");
     private final AmazonS3 s3 = AmazonS3ClientBuilder.standard()
             .withRegion(Regions.fromName("ap-northeast-2"))
             .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
             .disableChunkedEncoding()
             .build();
-
-    @PostMapping("/doLogin")
-    public void doLogin(@RequestParam String u_id, @RequestParam String u_pw, HttpServletRequest request , HttpServletResponse response, HttpSession session) throws IOException {
-//        String id = request.getParameter("mid");
-//        String password = request.getParameter("psw");
-        System.out.println("Input id: "+u_id+", Input pw: "+u_pw);
-
-        log.info("로그인 가능여부 판별");
-        String result = memberService.login(u_id,u_pw);
-        if(result.equals("F-2")){
-            log.info("로그인실패 - 아이디에대한 비번이 일치하지 않는다");
-            response.getWriter().write("F-2");
-        }
-        else if(result.equals("F-1")){  //아예 없는 아이디
-            log.info("로그인실패 - 없는 아이디");
-            response.getWriter().write("F-1");
-        }
-        else{
-            log.info("로그인 성공");
-            session.setAttribute("loginMemberId",u_id);
-            response.getWriter().write("Success");
-        }
-    }
 
     //회원가입폼으로
     @GetMapping("/createAccount")
@@ -80,6 +55,42 @@ public class LoginController {
         return "index";
     }
 
+    //난 지금 href로 uri에 접근하여 리소스 반환하는데 이 방식에서 get과 post가 구분이 될까? 전부 form으로 감싸야 할듯?
+    @PostMapping("/doLogin")
+    public void doLogin(@RequestParam String u_id,
+                        @RequestParam String u_pw, HttpServletResponse response, HttpSession session) throws IOException {
+        System.out.println("Input id: "+u_id+", Input pw: "+u_pw);
+
+        //SHA256
+        SecurityUtil sha = new SecurityUtil();
+        String encryptPassword = sha.encryptSHA256(u_pw);
+
+        log.info("로그인 가능여부 판별");
+        String result = memberService.login(u_id,encryptPassword);
+        if(result.equals("F-2")){
+            log.info("로그인실패 - 아이디에대한 비번이 일치하지 않는다");
+            response.getWriter().write("F-2");
+        }
+        else if(result.equals("F-1")){  //아예 없는 아이디
+            log.info("로그인실패 - 없는 아이디");
+            response.getWriter().write("F-1");
+        }
+        else{
+            log.info("로그인 성공");
+            session.setAttribute("loginMemberId",u_id);
+            response.getWriter().write("Success");
+        }
+    }
+
+    //로그아웃
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request){
+        log.info("로그아웃");
+        HttpSession session = request.getSession();
+        session.invalidate();
+        return "redirect:/";
+    }
+
     @PostMapping("/doRegister")
     public void doRegister(@RequestBody RegisterDTO registerVO, HttpServletResponse response) throws IOException {
 
@@ -90,6 +101,12 @@ public class LoginController {
         System.out.println("전화번호: "+registerVO.getU_tel());
         System.out.println("이메일: "+registerVO.getU_email());
         System.out.println("이미지: "+registerVO.getU_img());
+
+        //SHA256
+        SecurityUtil sha = new SecurityUtil();
+        String encryptPassword = sha.encryptSHA256(registerVO.getU_pw());
+        System.out.println("인코딩된 비밀번호: "+ encryptPassword);
+
         //AJAX쪽 변수이름과 DTO의 변수이름이 같아야 받아짐
         String result = memberService.isExistId(registerVO.getU_id()); //입력받은 id가 이미 사용중인지 확인 위함
         //available이면 사용가능한 id
@@ -107,7 +124,7 @@ public class LoginController {
         System.out.println("중복검사 통과");
         Member member = new Member();
         member.setLoginId(registerVO.getU_id());
-        member.setLoginPassword(registerVO.getU_pw());
+        member.setLoginPassword(encryptPassword);
         member.setName(registerVO.getU_name());
         member.setEmail(registerVO.getU_email());
         member.setTel(registerVO.getU_tel());
@@ -120,14 +137,5 @@ public class LoginController {
         String afterJoin = memberService.join(member);
         System.out.println(afterJoin+" 가입 완료");
         response.getWriter().write("available");
-    }
-
-    //로그아웃
-    @GetMapping("/logout")
-    public String logout(HttpServletRequest request){
-        log.info("로그아웃");
-        HttpSession session = request.getSession();
-        session.invalidate();
-        return "redirect:/";
     }
 }

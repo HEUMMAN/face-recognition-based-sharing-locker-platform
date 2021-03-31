@@ -38,11 +38,9 @@ public class MainController {
     private HttpSession session;
 
     //게시판 페이지로
-    @GetMapping("/toBoardList")
+    @GetMapping("/boards")
     public String toBoardList(Model model){
         log.info("게시판 페이지로 이동");
-//        List<Board> boards = boardService.findBoards();
-//        model.addAttribute("boards", boards);
         return "boardList";
     }
 
