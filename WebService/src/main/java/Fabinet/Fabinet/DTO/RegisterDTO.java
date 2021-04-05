@@ -10,11 +10,11 @@ import java.sql.Blob;
 public class RegisterDTO {
 
     //AJAX측의 변수명과 같아야 받아진다
-    private String u_name;
-    private String u_id;
-    private String u_pw;
-    private String u_pw2;
-    private String u_tel;
-    private String u_email;
+    private String userName;
+    private String userID;
+    private String userPW;
+    private String userPW2;
+    private String userEmail;
+    private String userTel;
     private Blob u_img;
 }

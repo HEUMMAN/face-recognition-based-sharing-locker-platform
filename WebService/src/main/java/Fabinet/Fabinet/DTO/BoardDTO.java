@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 public class BoardDTO {
 
     //AJAX측의 변수명과 같아야 받아진다
-    private String b_title;
-    private String b_content;
-    private String author;
-    private LocalDateTime date;
+    private String title;
+    private String content;
+//    private String author;
+//    private LocalDateTime date;
 }
