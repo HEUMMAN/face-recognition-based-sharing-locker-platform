@@ -1,6 +1,7 @@
 package Fabinet.Fabinet.Controller;
 
 import Fabinet.Fabinet.Config.SecurityUtil;
+import Fabinet.Fabinet.DTO.LoginDTO;
 import Fabinet.Fabinet.Domain.Image;
 import Fabinet.Fabinet.Domain.Member;
 import Fabinet.Fabinet.Service.ImageService;
@@ -26,7 +27,7 @@ import java.io.IOException;
 /*로그인
 * 회원가입
 * */
-@Controller
+@RestController
 @Slf4j
 @RequiredArgsConstructor
 public class LoginController {
@@ -41,32 +42,18 @@ public class LoginController {
             .disableChunkedEncoding()
             .build();
 
-    //회원가입폼으로
-    @GetMapping("/createAccount")
-    public String toCreateAccount(){
-        log.info("회원가입 페이지로 이동");
-        return "register";
-    }
 
-    //로그인화면으로
-    @GetMapping("/login")
-    public String toMain(){
-        log.info("로그인 페이지로 이동");
-        return "index";
-    }
+    @PostMapping("/login")
+    public void doLogin(@RequestBody LoginDTO loginDTO, HttpServletResponse response, HttpSession session) throws IOException {
 
-    //난 지금 href로 uri에 접근하여 리소스 반환하는데 이 방식에서 get과 post가 구분이 될까? 전부 form으로 감싸야 할듯?
-    @PostMapping("/doLogin")
-    public void doLogin(@RequestParam String u_id,
-                        @RequestParam String u_pw, HttpServletResponse response, HttpSession session) throws IOException {
-        System.out.println("Input id: "+u_id+", Input pw: "+u_pw);
+        System.out.println("Input id: "+loginDTO.getUserID()+", Input pw: "+loginDTO.getUserPW());
 
         //SHA256
         SecurityUtil sha = new SecurityUtil();
-        String encryptPassword = sha.encryptSHA256(u_pw);
+        String encryptPassword = sha.encryptSHA256(loginDTO.getUserPW());
 
         log.info("로그인 가능여부 판별");
-        String result = memberService.login(u_id,encryptPassword);
+        String result = memberService.login(loginDTO.getUserID(),encryptPassword);
         if(result.equals("F-2")){
             log.info("로그인실패 - 아이디에대한 비번이 일치하지 않는다");
             response.getWriter().write("F-2");
@@ -77,38 +64,29 @@ public class LoginController {
         }
         else{
             log.info("로그인 성공");
-            session.setAttribute("loginMemberId",u_id);
+            session.setAttribute("loginMemberId",loginDTO.getUserID());
             response.getWriter().write("Success");
         }
     }
 
-    //로그아웃
-    @GetMapping("/logout")
-    public String logout(HttpServletRequest request){
-        log.info("로그아웃");
-        HttpSession session = request.getSession();
-        session.invalidate();
-        return "redirect:/";
-    }
+    @PostMapping("/register")
+    public void doRegister(@RequestBody RegisterDTO registerDTO, HttpServletResponse response) throws IOException {
 
-    @PostMapping("/doRegister")
-    public void doRegister(@RequestBody RegisterDTO registerVO, HttpServletResponse response) throws IOException {
-
-        System.out.println("이름: "+registerVO.getU_name());
-        System.out.println("로그인 아이디: "+registerVO.getU_id());
-        System.out.println("로그인 비밀번호: "+registerVO.getU_pw());
-        System.out.println("로그인 비밀번호 확인: "+registerVO.getU_pw2());
-        System.out.println("전화번호: "+registerVO.getU_tel());
-        System.out.println("이메일: "+registerVO.getU_email());
-        System.out.println("이미지: "+registerVO.getU_img());
+        System.out.println("이름: "+registerDTO.getUserName());
+        System.out.println("로그인 아이디: "+registerDTO.getUserID());
+        System.out.println("로그인 비밀번호: "+registerDTO.getUserPW());
+        System.out.println("로그인 비밀번호 확인: "+registerDTO.getUserPW2());
+        System.out.println("전화번호: "+registerDTO.getUserTel());
+        System.out.println("이메일: "+registerDTO.getUserEmail());
+        System.out.println("이미지: "+registerDTO.getU_img());
 
         //SHA256
         SecurityUtil sha = new SecurityUtil();
-        String encryptPassword = sha.encryptSHA256(registerVO.getU_pw());
+        String encryptPassword = sha.encryptSHA256(registerDTO.getUserPW());
         System.out.println("인코딩된 비밀번호: "+ encryptPassword);
 
         //AJAX쪽 변수이름과 DTO의 변수이름이 같아야 받아짐
-        String result = memberService.isExistId(registerVO.getU_id()); //입력받은 id가 이미 사용중인지 확인 위함
+        String result = memberService.isExistId(registerDTO.getUserID()); //입력받은 id가 이미 사용중인지 확인 위함
         //available이면 사용가능한 id
         //occupied면 이미 사용중인 id
         if(result.equals("occupied")){
@@ -116,18 +94,18 @@ public class LoginController {
             response.getWriter().write("occupied");
             return;
         }
-        if(!registerVO.getU_pw().equals(registerVO.getU_pw2())){    //비밀번호 확인이 틀릴경우
+        if(!registerDTO.getUserPW().equals(registerDTO.getUserPW2())){    //비밀번호 확인이 틀릴경우
             System.out.println("비밀번호확인이 틀림");
             response.getWriter().write("wrongCheck");
             return;
         }
         System.out.println("중복검사 통과");
         Member member = new Member();
-        member.setLoginId(registerVO.getU_id());
+        member.setLoginId(registerDTO.getUserID());
         member.setLoginPassword(encryptPassword);
-        member.setName(registerVO.getU_name());
-        member.setEmail(registerVO.getU_email());
-        member.setTel(registerVO.getU_tel());
+        member.setName(registerDTO.getUserName());
+        member.setEmail(registerDTO.getUserEmail());
+        member.setTel(registerDTO.getUserTel());
 
 //        //python에서 얼굴조회를 해야하기에 얼굴테이블을 따로 분리하여 만들었다.
 //        Image image = new Image();
