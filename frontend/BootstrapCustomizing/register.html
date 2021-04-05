@@ -39,37 +39,32 @@
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
                                 </div>
-    
-                                <form class="user" action="/doRegister" method="post" th:object="${accountForm}">
                                     <div class="form-group">
-                                        <input type="text" class="form-control form-control-user" id="registerId"
-                                               placeholder="Name" th:field="*{name}">
+                                        <input class="form-control" id="name" type="text" placeholder="Name" required="required" data-validation-required-message="Please enter your name." />
+                                        <p class="help-block text-danger"></p>
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" minlength="4" class="form-control form-control-user" id="registerId"
-                                               placeholder="Id" th:field="*{loginId}">
+                                        <input class="form-control" id="id" type="text" placeholder="ID" required="required" data-validation-required-message="Please enter your name." />
+                                        <p class="help-block text-danger"></p>
                                     </div>
                                     <div class="form-group">
-                                        <input type="email" class="form-control form-control-user" id="registerEmail"
-                                            placeholder="Email Address" th:field="*{email}">
+                                        <input class="form-control" id="pw" type="text" placeholder="Password" required="required" data-validation-required-message="Please enter your name." />
+                                        <p class="help-block text-danger"></p>
                                     </div>
                                     <div class="form-group">
-                                        <input type="tel" class="form-control form-control-user" id="registerTel"
-                                               placeholder="Phone Number" th:field="*{tel}">
+                                        <input class="form-control" id="pw2" type="text" placeholder="check password" required="required" data-validation-required-message="Please enter your name." />
+                                        <p class="help-block text-danger"></p>
                                     </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <input type="password" class="form-control form-control-user"
-                                                id="registerPW" minlength="4" placeholder="Password" th:field="*{password}">
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <input type="password" class="form-control form-control-user"
-                                                id="registerPWrepeat" minlength="4" placeholder="Repeat Password" th:field="*{passwordCheck}">
-                                        </div>
+                                    <div class="form-group">
+                                        <input class="form-control" id="email" type="text" placeholder="Email" required="required" data-validation-required-message="Please enter your name." />
+                                        <p class="help-block text-danger"></p>
                                     </div>
-                                    <button type="submit" class="btn btn-primary btn-user btn-block">가입하기</button>
-                                </form>
-    
+                                    <div class="form-group">
+                                        <input class="form-control" id="tel" type="text" placeholder="Tel" required="required" data-validation-required-message="Please enter your name." />
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+
+                                    <div class="btn btn-primary btn-user btn-block" id = "register_btn">회원가입</div>
                                 <hr>
                                 <div class="text-center">
                                     <a class="small" href="forgot-password.html">Forgot Password?</a>
@@ -103,6 +98,59 @@
                 </div>
             </div>
         </footer>
+
+        <script>
+            $(document).ready(function(){
+                $("#register_btn").click(function(){
+                    var json = {
+                        userName : $("#name").val(),
+                        userID : $("#id").val(),
+                        userPW : $("#pw").val(),
+                        userPW2 : $("#pw2").val(),
+                        userEmail : $("#email").val(),
+                        userTel : $("#tel").val()
+                    };
+                    //여기 하자
+                    for(var str in json){
+                        if(json[str].length == 0){
+                            alert($("#" + str).attr("placeholder") + "를 입력해주세요.");
+                            $("#" + str).focus();
+                            return;
+                        }
+                    }
+                    
+                     $.ajax({
+                        type : "POST",
+                        url : "/login",
+                        data : json,
+                        contentType: 'application/json',
+                        success : function(data) {
+                            console.log(data);
+                            if (data == 'F-2') {
+                                alert('비밀번호가 일치하지 않습니다.')
+                            }
+                            else if(data == 'F-1'){
+                                alert('존재하지 않는 아이디입니다.')
+                            }
+                            else {
+                                location.href = "/";
+                            }
+                        }
+                    });
+                });
+
+                $("#register_btn").click(function(){
+                    
+                     $.ajax({
+                        type : "GET",
+                        url : "/register",
+                        success : function() {
+                        }
+                    });
+                });
+            });
+        </script>
+
         <!-- Bootstrap core JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>

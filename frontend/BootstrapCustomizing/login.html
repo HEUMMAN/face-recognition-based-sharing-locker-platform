@@ -39,32 +39,25 @@
                                 <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>       <!--여기가 이미지 삽입 css파일 500번째줄-->
                                 <div class="col-lg-6">
                                     <div class="p-5">
+
                                         <div class="text-center">
                                             <h1 class="h4 text-gray-900 mb-4">회원 로그인</h1>
                                         </div>
-                                        <form class="user" action="doLogin" method="post" th:object="${loginForm}">
+
+                                        <form class="user">
                                             <div class="form-group">
-                                                <input type="text" class="form-control form-control-user"
-                                                    id="exampleInputEmail" aria-describedby="emailHelp"
-                                                    placeholder="Id" th:field="*{userID}">
+                                                <input class="form-control" id="userID" type="text" placeholder="ID" required="required" data-validation-required-message="Please enter your name." />
+                                                <p class="help-block text-danger"></p>
                                             </div>
                                             <div class="form-group">
-                                                <input type="password" class="form-control form-control-user"
-                                                    id="exampleInputPassword" placeholder="Password" th:field="*{userPW}">
+                                                <input class="form-control" id="userPW" type="text" placeholder="PW" required="required" data-validation-required-message="Please enter your name." />
+                                                <p class="help-block text-danger"></p>
                                             </div>
-                                            <button type="submit" class="btn btn-primary btn-user btn-block">로그인</button>
-                                            <br>
-                                            <!--<button type="submit" class="btn btn-primary btn-user btn-block" id="ajaxLogin">AJAX 로그인</button>-->
-                                            <input type='button' id='ajaxLogin' value='AJAX 로그인' class="btn btn-primary btn-user btn-block"/>
-                                            <br>
-                                            <div class="text-center">
-                                                <a href="/createAccount" class="btn btn-primary btn-user btn-block">회원가입</a>
-                                            </div>
+                                            <div class="btn btn-primary btn-user btn-block" id = "login_btn">로그인</div>
+                                            <div class="btn btn-primary btn-user btn-block" id = "register_btn">회원가입</div>
                                         </form>
+
                                         <br>
-    <!--                                    <div class="text-center">-->
-    <!--                                        <a href="/createAccount" class="btn btn-primary btn-user btn-block">회원가입</a>-->
-    <!--                                    </div>-->
                                     </div>
                                 </div>
                             </div>
@@ -93,6 +86,53 @@
                 </div>
             </div>
         </footer>
+        <script>
+            $(document).ready(function(){
+                $("#login_btn").click(function(){
+                    var json = {
+                        userID : $("#userID").val(),
+                        userPW : $("#userPW").val()
+                    };
+                    
+                    for(var str in json){
+                        if(json[str].length == 0){
+                            alert($("#" + str).attr("placeholder") + "를 입력해주세요.");
+                            $("#" + str).focus();
+                            return;
+                        }
+                    }
+                    
+                     $.ajax({
+                        type : "POST",
+                        url : "/login",
+                        data : json,
+                        contentType: 'application/json',
+                        success : function(data) {
+                            console.log(data);
+                            if (data == 'F-2') {
+                                alert('비밀번호가 일치하지 않습니다.')
+                            }
+                            else if(data == 'F-1'){
+                                alert('존재하지 않는 아이디입니다.')
+                            }
+                            else {
+                                location.href = "/";
+                            }
+                        }
+                    });
+                });
+
+                $("#register_btn").click(function(){
+                    
+                     $.ajax({
+                        type : "GET",
+                        url : "/register",
+                        success : function() {
+                        }
+                    });
+                });
+            });
+        </script>
         <!-- Bootstrap core JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
