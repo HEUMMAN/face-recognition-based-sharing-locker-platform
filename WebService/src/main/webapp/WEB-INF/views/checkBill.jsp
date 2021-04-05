@@ -72,12 +72,13 @@
                     예시 가격: 10
                     서버에서 넘어온 가격: ${payMoney}
                     <br>
-                        <form method="post", action="/doPayment">
+                        <%--<form method="post", action="/doPayment">
                             <input type="submit" class="ui fluid large teal submit button" value="정산하기">
-                        </form>
-                </div>
-                <div class="ui error message"></div>
+                        </form>--%>
+                        <br>
+                        <a href="/payment"><div class="ui fluid large teal submit button" id="go_payment">결제하기</div>
             </div>
+                <div class="ui error message"></div>
         </div>
     </div>
 
@@ -98,18 +99,17 @@
             </div>
         </div>
     </div>
-    <%--<script>
+    <script>
         $(document).ready(function() {
             $("#doPayment").click(function() {
 
-                var json = {
+                /*var json = {
                     money: $("#payMoney").val() //서버측에서 model로 결제할 금액 넘겨야할듯 그리고 여기서 $로 사용하자
-                };
+                };*/
 
                 $.ajax({
-                    type: "POST",
-                    url: "doPayment",
-                    data : json,
+                    type: "GET",
+                    url: "payment",
                     success: function (data) {
                         switch (Number(data)) {
                             case -1:
@@ -132,7 +132,21 @@
             });
         });
 
-    </script>--%>
+
+        $(document).ready(function() {
+                $.ajax({
+                    type: "GET",
+                    url: "bill",
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                    },
+                    error: function (error) {
+                        alert("오류 발생" + error);
+                    }
+                });
+        });
+    </script>
 
     <!-- js 가져오기 -->
     <script src="/jquery3.3.1.min.js"></script>

@@ -1,247 +1,122 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Agency - Start Bootstrap Theme</title>
+        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" /><div class="ui middle aligned center aligned grid"></div>
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        <%--        제이쿼리--%>
+        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    </head>
+    <body id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand js-scroll-trigger" href="#page-top"><img src="assets/img/navbar-logo.svg" alt="" /></a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"/>
+            </div>
+        </nav>
+        <!-- 시작 -->
+        <br><br><br>
+        <div class="container">
 
-<head>
-    <meta charset="UTF-8">
-    <title>사물함 선택하기</title>
-    <!-- css 가져오기 -->
-    <link rel="stylesheet" type="text/css" href="/semantic.min.css">
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0"  style=" display: inline-block; text-align: center;">
+                    <!-- Nested Row within Card Body -->
+                    <div class="text-center">
+                        <br>
+                        <h1 class="h4 text-gray-900 mb-4">사용할 사물함을 선택하세요</h1>
+                    </div>
 
-    <style type="text/css">
-        body {
-            background-color: #DADADA;
-        }
+                    <div class="row" style=" display: inline-block; text-align: center;">
+                        <form class="user">
+                            <div class="card mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">옵션 선택</h6>
+                                </div>
+                                <div class="card-body">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button"
+                                            id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            건물
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="#">Action</a>
+                                            <a class="dropdown-item" href="#">Another action</a>
+                                            <a class="dropdown-item" href="#">Something else here</a>
+                                        </div>
 
-        body>.grid {
-            height: 100%;
-        }
+                                        <button class="btn btn-secondary dropdown-toggle" type="button"
+                                            id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            층
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="#">Action</a>
+                                            <a class="dropdown-item" href="#">Another action</a>
+                                            <a class="dropdown-item" href="#">Something else here</a>
+                                        </div>
 
-        .image {
-            margin-top: -100px;
-        }
-
-        .column {
-            max-width: 1000px;
-        }
-
-        .view_btn {
-            cursor: pointer;
-        }
-
-    </style>
-</head>
-
-<body>
-    <div class="ui middle aligned center aligned grid">
-        <div class="column">
-            <h2 class="ui teal image header">
-                사물함 선택하기
-            </h2>
-            <div class="ui large form">
-                <div class="ui stacked segment">
-                    <form action="/chooseCabinet" method="post">
-                        <table class="ui celled table">
-                            <thead>
-                                <tr>
-                                    <select id="select1", name="select1" onchange="itemChange()">
-                                        <option>A동</option>
-                                        <option>B동</option>
-                                        <option>D동</option>
-                                        <option>E동</option>
-                                        <option>산융</option>
-                                    </select>
-
-                                    <select id="select2", name="select2" onchange="itemChange2()">
-                                    </select>
-
-                                    <select id="select3", name="select3">
-                                    </select>
-                                </tr>
-                            </thead>
-                            <tbody id="list">
-                            </tbody>
-                        </table>
-                        <%--<a href="/chooseCabinet"><button class="ui fluid large teal submit button">선택완료</button></a>--%>
-                        <input type="submit" class="ui fluid large teal submit button" value="선택완료">
-                        <!--선택 완료 누르면 선택정보 재확인 및 선불 후불 결제 페이지로 넘어가자-->
-                    </form>
+                                        <button class="btn btn-secondary dropdown-toggle" type="button"
+                                            id="dropdownMenuButton3" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            번호
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="#">Action</a>
+                                            <a class="dropdown-item" href="#">Another action</a>
+                                            <a class="dropdown-item" href="#">Something else here</a>
+                                        </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-user btn-block">사용하기</button>
+                        </form>
+                        <br><br>
+                    </div>
                 </div>
-
-                <div class="ui error message"></div>
-
             </div>
         </div>
-    </div>
+        <!-- 끝 -->
 
-    <div class="ui modal" id='view_modal'>
-        <i class="close">x</i>
-        <div class="header" id="b_title">
-            
-        </div>
-        <div class="content">
-            <div class="description">
-            	<p style = "text-align: right" id = "b_review"></p>
-            	<div id = 'b_content'></div>
+        
+        <!-- Footer-->
+        <footer class="footer py-4">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-4 text-lg-left">Copyright © Your Website 2020</div>
+                    <div class="col-lg-4 my-3 my-lg-0">
+                        <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <div class="col-lg-4 text-lg-right">
+                        <a class="mr-3" href="#!">Privacy Policy</a>
+                        <a href="#!">Terms of Use</a>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="actions">
-            <div class="ui black deny button">
-                닫기
-            </div>
-        </div>
-    </div>
-
-    <!-- js 가져오기 -->
-    <script src="/jquery3.3.1.min.js"></script>
-    <script src="/semantic.min.js"></script>
-
-    <%--<script type="text/javascript">
-        var target = document.getElementById("select1");
-        alert('선택된 옵션 text 값=' + target.options[target.selectedIndex].text);     // 옵션 text 값
-        alert('선택된 옵션 value 값=' + target.options[target.selectedIndex].value);     // 옵션 value 값
-    </script>
-    <script type="text/javascript">
-        var target = document.getElementById("select2");
-        alert('선택된 옵션 text 값=' + target.options[target.selectedIndex].text);     // 옵션 text 값
-        alert('선택된 옵션 value 값=' + target.options[target.selectedIndex].value);     // 옵션 value 값
-    </script>
-    <script type="text/javascript">
-        var target = document.getElementById("select3");
-        alert('선택된 옵션 text 값=' + target.options[target.selectedIndex].text);     // 옵션 text 값
-        alert('선택된 옵션 value 값=' + target.options[target.selectedIndex].value);     // 옵션 value 값
-    </script>--%>
-
-
-
-    <script>
-        //아 어자피 DB 조회해서 사용가능한 사물함만 보이도록 해야한다.
-        function itemChange(){
-            var A_floor = ["1층","2층","3층"];
-            var B_floor = ["1층","2층","3층"];
-            var D_floor = ["1층","2층","3층"];
-            var E_floor = ["1층","2층","3층"];
-            var San_floor = ["1층","2층","3층"];
-
-            selectItem = $("#select1").val();   //이거 전역변수다. 밑에 itemChange2에서도 사용해야하므로.
-            var changeItem;
-
-            if(selectItem == "A동"){
-                changeItem = A_floor;
-            }
-            else if(selectItem == "B동"){
-                changeItem = B_floor;
-            }
-            else if(selectItem == "D동"){
-                changeItem =  D_floor;
-            }
-            else if(selectItem == "E동"){
-                changeItem = E_floor;
-            }
-            else if(selectItem == "산융"){
-                changeItem =  San_floor;
-            }
-
-            $('#select2').empty();
-
-            for(var count = 0; count < changeItem.length; count++){
-                var option = $("<option>"+changeItem[count]+"</option>");
-                $('#select2').append(option);
-            }
-        }
-    </script>
-
-    <script>
-        function itemChange2(){
-            var A1_num = ["A동 1층","1-1","1-2","1-3","1-4","1-5"];
-            var A2_num = ["A동 2층","2-1","2-2","2-3"];
-            var A3_num = ["A동 3층","3-1","3-2","3-3","3-4","3-5","3-6"];
-
-            var B1_num = ["B동 1층","1-1","1-2","1-3","1-4","1-5"];
-            var B2_num = ["B동 2층","2-1","2-2","2-3"];
-            var B3_num = ["B동 3층","3-1","3-2","3-3","3-4","3-5","3-6"];
-
-            var D1_num = ["D동 1층","1-1","1-2","1-3","1-4","1-5"];
-            var D2_num = ["D동 2층","2-1","2-2","2-3"];
-            var D3_num = ["D동 3층","3-1","3-2","3-3","3-4","3-5","3-6"];
-
-            var E1_num = ["E동 1층","1-1","1-2","1-3","1-4","1-5"];
-            var E2_num = ["E동 2층","2-1","2-2","2-3"];
-            var E3_num = ["E동 3층","3-1","3-2","3-3","3-4","3-5","3-6"];
-
-            var San1_num = ["산융 1층","1-1","1-2","1-3","1-4","1-5"];
-            var San2_num = ["산융 2층","2-1","2-2","2-3"];
-            var San3_num = ["산융 3층","3-1","3-2","3-3","3-4","3-5","3-6"];
-
-            //selectItem은 지금 어느 건물인지 담겨있다.
-            //selectItem2는 몇층인지 담겨있다.
-            var selectItem2 = $("#select2").val();
-
-            if(selectItem == "A동"){
-                if(selectItem2 == "1층"){
-                    changeItem = A1_num;
-                }
-                else if(selectItem2 == "2층"){
-                    changeItem = A2_num;
-                }
-                else if(selectItem2 == "3층"){
-                    changeItem = A3_num;
-                }
-            }
-            if(selectItem == "B동"){
-                if(selectItem2 == "1층"){
-                    changeItem = B1_num;
-                }
-                else if(selectItem2 == "2층"){
-                    changeItem = B2_num;
-                }
-                else if(selectItem2 == "3층"){
-                    changeItem = B3_num;
-                }
-            }
-            if(selectItem == "D동"){
-                if(selectItem2 == "1층"){
-                    changeItem = D1_num;
-                }
-                else if(selectItem2 == "2층"){
-                    changeItem = D2_num;
-                }
-                else if(selectItem2 == "3층"){
-                    changeItem = D3_num;
-                }
-            }
-            if(selectItem == "E동"){
-                if(selectItem2 == "1층"){
-                    changeItem = E1_num;
-                }
-                else if(selectItem2 == "2층"){
-                    changeItem = E2_num;
-                }
-                else if(selectItem2 == "3층"){
-                    changeItem = E3_num;
-                }
-            }
-            if(selectItem == "산융"){
-                if(selectItem2 == "1층"){
-                    changeItem = San1_num;
-                }
-                else if(selectItem2 == "2층"){
-                    changeItem = San2_num;
-                }
-                else if(selectItem2 == "3층"){
-                    changeItem = San3_num;
-                }
-            }
-
-            $('#select3').empty();
-
-            for(var count = 0; count < changeItem.length; count++){
-                var option = $("<option>"+changeItem[count]+"</option>");
-                $('#select3').append(option);
-            }
-        }
-    </script>
-</body>
-
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Third party plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+        <!-- Contact form JS-->
+        <script src="assets/mail/jqBootstrapValidation.js"></script>
+        <script src="assets/mail/contact_me.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+    </body>
 </html>

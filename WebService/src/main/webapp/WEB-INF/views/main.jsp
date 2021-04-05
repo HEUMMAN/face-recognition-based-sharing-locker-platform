@@ -71,7 +71,7 @@
                     <br>
                     <a href="/toChooseCabinet"><button class="ui fluid large teal submit button" id="go_cabinet">사물함 선택</button></a>
                     <br>
-                    <div class="ui fluid large teal submit button" id="go_payment">정산하기</div>
+                    <a href="/adjustment"><div class="ui fluid large teal submit button" id="go_payment">정산하기</div>
 
                     <form action="/imgUpload" method="post" enctype="multipart/form-data">
                         <div class="field">
@@ -118,7 +118,7 @@
     <script src="/semantic.min.js"></script>
 
     <script>
-        $(document).ready(function() {
+        /*$(document).ready(function() {
             $("#go_payment").click(function() {
                 $.ajax({
                     type: "get",
@@ -142,33 +142,14 @@
                         alert("오류 발생" + error);
                     }
                 });
-            });
+            });*/
 
             /*$("#go_payment").click(function() {
                 $.ajax({
                     type: "get",
-                    url: "/logout",
-                    success: function (data) {
-                        switch (Number(data)) {
-                            case -1:
-                                alert("로그인 후 이용해주세요.");
-                                window.location.href = "/";
-                                break;
-                            case 1:
-                                window.location.href = "/toPayment";
-                                break;
-
-                            default:
-                                alert("알수없는 오류가 발생 했습니다.[Error Code : " + Number(data) + "]");
-                                break;
-                        }
-                    },
-                    error: function (error) {
-                        alert("오류 발생" + error);
-                    }
+                    url: "/adjustment",
                 });
             });*/
-        });
 
     </script>
 </body>
