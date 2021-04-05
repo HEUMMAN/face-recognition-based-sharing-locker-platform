@@ -3,7 +3,6 @@ package Fabinet.Fabinet.Service;
 import Fabinet.Fabinet.Domain.Board;
 import Fabinet.Fabinet.Domain.Cabinet;
 import Fabinet.Fabinet.Domain.Member;
-import Fabinet.Fabinet.Repository.BoardRepository;
 import Fabinet.Fabinet.Repository.CabinetRepository;
 import Fabinet.Fabinet.Repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +21,11 @@ public class CabinetServiceImpl implements CabinetService{
 
     private final CabinetRepository cabinetRepository;
     private final MemberRepository memberRepository;
+
+    @Override
+    public List<Cabinet> findAllByID(Member member){
+        return cabinetRepository.findAllbyName(member);
+    }
 
     @Override
     public String calculateBill(Board board) {

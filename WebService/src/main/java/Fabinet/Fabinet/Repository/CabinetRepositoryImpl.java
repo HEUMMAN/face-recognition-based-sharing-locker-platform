@@ -1,6 +1,5 @@
 package Fabinet.Fabinet.Repository;
 
-import Fabinet.Fabinet.Domain.Board;
 import Fabinet.Fabinet.Domain.Cabinet;
 import Fabinet.Fabinet.Domain.Member;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -28,8 +26,10 @@ public class CabinetRepositoryImpl implements CabinetRepository{
     }
 
     @Override
-    public List<Board> findAll() {
-        return null;
+    public List<Cabinet> findAllbyName(Member member) {
+        log.info("사용중인 사물함 전체 불러오기");
+        return em.createQuery("select c from Cabinet c where c.member=:member",Cabinet.class)
+                .setParameter("member",member).getResultList();
     }
 
     @Override

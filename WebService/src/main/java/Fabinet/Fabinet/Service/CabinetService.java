@@ -13,4 +13,6 @@ public interface CabinetService {
     long getBill(Member member);
 
     String chooseCanibet(Cabinet cabinet);
+
+    public List<Cabinet> findAllByID(Member member);
 }
