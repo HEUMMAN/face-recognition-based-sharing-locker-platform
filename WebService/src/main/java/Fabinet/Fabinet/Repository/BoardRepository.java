@@ -9,4 +9,6 @@ public interface BoardRepository {
     public void save(Board board);
 
     public List<Board> findAll();
+
+    public Board findOne(long id);
 }

@@ -1,6 +1,7 @@
 package Fabinet.Fabinet.Repository;
 
 import Fabinet.Fabinet.Domain.Board;
+import Fabinet.Fabinet.Domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -24,5 +25,11 @@ public class BoardRepositoryImpl implements BoardRepository{
     public List<Board> findAll(){
         log.info("게시물 전체 불러오기");
         return em.createQuery("select b from Board b",Board.class).getResultList();
+    }
+
+    @Override
+    public Board findOne(long id) {
+        log.info(id+"번 게시물 불러오기");
+        return em.find(Board.class, id);
     }
 }

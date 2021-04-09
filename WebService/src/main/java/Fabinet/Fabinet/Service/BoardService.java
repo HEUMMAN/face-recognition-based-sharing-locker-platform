@@ -10,4 +10,6 @@ public interface BoardService {
     public String createBoard(Board board);
 
     public List<Board> findBoards();
+
+    public Board findOne(long id);
 }
