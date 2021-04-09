@@ -79,6 +79,27 @@
             </div>
         </div>
 
+        <%--모달--%>
+        <div class="portfolio-modal modal fade" id='view_modal'>
+            <i class="close-modal">x</i>
+            <div class="header" id="b_title">
+
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="modal-body">
+                        <p style = "text-align: right" id = "b_review"></p>
+                        <div id = 'b_content'></div>
+                    </div>
+                </div>
+            </div>
+            <div class="actions">
+                <div class="btn btn-primary" data-dismiss="modal">
+                    닫기
+                </div>
+            </div>
+        </div>
+
         
         <!-- Footer-->
         <footer class="footer py-4">
@@ -102,7 +123,7 @@
             $(document).ready(function() {
                 $.ajax({
                     type: "get",
-                    url: "/board/list",
+                    url: "/board/post",     //이게 /board로 오면 jsp페이지를 반환하고 그 안의 글목록을 반환하려면 /board/post를 따로 해줘야하는데 이래도되는가?
                     success: function(data) {
                         console.log(data);
                         for (var str in data) {
@@ -119,11 +140,13 @@
                 });
 
                 $(document).on("click", ".view_btn", function() {
-                    var b_no = $(this).parent().attr("data-id");
-
+                    var b_no = $(this).parent().attr("data-id");    //이거 글번호 읽기가 안된다 어케하지
+                    console.log(b_no);
                     $.ajax({
                         type: "get",
-                        url: "get_bbs",
+                        url: "/board?id="+b_no,
+                        contentType : "application/json; charset=UTF-8",
+                        dataType : "json",
                         data: {
                             b_no: b_no
                         },
