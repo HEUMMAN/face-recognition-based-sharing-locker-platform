@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Getter @Setter
@@ -19,7 +20,8 @@ public class Cabinet {
     private String building;
     private String floor;
     private String number;
-    private LocalDateTime startTime;
+    //private LocalDateTime startTime;
+    private Date startTime;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
