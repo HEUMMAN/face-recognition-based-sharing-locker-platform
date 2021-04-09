@@ -34,6 +34,7 @@ public class LoginController {
 
     private final MemberService memberService;
     private final ImageService imageService;
+    private final String salt = "haha";
 
     BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIAID7ORZRGXAVUBEXA", "AXgZBzrc/y4KzejD35GLZomcjYkm/dti40s642hE");
     private final AmazonS3 s3 = AmazonS3ClientBuilder.standard()
@@ -50,7 +51,7 @@ public class LoginController {
 
         //SHA256
         SecurityUtil sha = new SecurityUtil();
-        String encryptPassword = sha.encryptSHA256(loginDTO.getUserPW());
+        String encryptPassword = sha.encryptSHA256(loginDTO.getUserPW()+salt);
 
         log.info("로그인 가능여부 판별");
         String result = memberService.login(loginDTO.getUserID(),encryptPassword);
@@ -82,7 +83,7 @@ public class LoginController {
 
         //SHA256
         SecurityUtil sha = new SecurityUtil();
-        String encryptPassword = sha.encryptSHA256(registerDTO.getUserPW());
+        String encryptPassword = sha.encryptSHA256(registerDTO.getUserPW()+salt);
         System.out.println("인코딩된 비밀번호: "+ encryptPassword);
 
         //AJAX쪽 변수이름과 DTO의 변수이름이 같아야 받아짐
