@@ -34,7 +34,7 @@ public class CabinetServiceImpl implements CabinetService{
 
     @Override
     public long getBill(Member member) {
-        List<Cabinet> usingCabinet = cabinetRepository.getDate(member); //로그인id(세션id)를 통해 해당 멤버 조회후 멤버로 사물함 사용내용 조회
+        /*List<Cabinet> usingCabinet = cabinetRepository.getDate(member); //로그인id(세션id)를 통해 해당 멤버 조회후 멤버로 사물함 사용내용 조회
         for (Cabinet a : usingCabinet) {
             System.out.println("현재 사용자가 점유하고있는 사물함: "+a.getName());
         }
@@ -61,7 +61,8 @@ public class CabinetServiceImpl implements CabinetService{
         catch (Exception e){
             e.printStackTrace();
         }
-        return calDate;
+        return calDate;*/
+        return 1L;
     }
 
     @Override
