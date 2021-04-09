@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -34,6 +35,7 @@ public class CabinetController {
     //(가능한 사물함을 모두 적어놓은 목록) - (cabinet테이블에 존재하는 사물함들) 의 값만 드롭다운에 출력(즉, 사용가능한 사물함칸들)
     //(가능한 사물함을 모두 적어놓은 목록)을 따로 클래스를 만들어서 미리 정의해놓자
 
+    //사물함 사용시간을 LocalDateTime에서 Date로 바꿨다. 사물함 추가하기 기능 구현하고 확인해보자
     @GetMapping("list")
     public List<Cabinet> showEntireBill(HttpServletRequest request){
         HttpSession session = request.getSession();
@@ -43,10 +45,11 @@ public class CabinetController {
         for(Cabinet a : cabinets){
             System.out.println(a.getName());
         }
+
         return cabinets;
     }
 
-    //요금 정산
+    //요금 정산 361482526
     //ResponseEntity
     @GetMapping("/bill2")
     public BillDTO toPayment(Model model, HttpServletRequest request) {
@@ -79,7 +82,7 @@ public class CabinetController {
     @PostMapping("/chooseCabinet")
     public String chooseCabinet(@RequestParam(value="select1") String select1,
                                 @RequestParam(value="select2") String select2,
-                                @RequestParam(value="select3") String select3,HttpServletRequest request){
+                                @RequestParam(value="select3") String select3, HttpServletRequest request){
         System.out.println("select1: "+select1);
         System.out.println("select2: "+select2);
         System.out.println("select3: "+select3);
@@ -90,7 +93,7 @@ public class CabinetController {
         Cabinet cabinet = new Cabinet();
         cabinet.setName(select1+"-"+select2+"-"+select3);
         cabinet.setMember(memberService.findOne(sessionId));
-        cabinet.setStartTime(LocalDateTime.now());
+        cabinet.setStartTime(new Date());
         cabinetService.chooseCanibet(cabinet);
 
         return "redirect:/";
