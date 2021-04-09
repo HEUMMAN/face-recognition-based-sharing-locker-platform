@@ -51,12 +51,11 @@
                                     <table class="ui celled table">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
+                                                <th>번호</th>
                                                 <th>사물함</th>
                                                 <th>시작시간</th>
-                                                <th>경과시간</th>
-                                                <th>요금</th>
-                                                <th>선택</th>   <!--몇개 골라서 결제가능하도록-->
+                                                <th>요금</th>   <!--몇개 골라서 결제가능하도록-->
+                                                <th>선택</th>
                                             </tr>
                                         </thead>
                                         <br>
@@ -96,6 +95,7 @@
 
         <script>
             $(document).ready(function() {
+                var now = new Date();
                 $.ajax({
                     type: "get",
                     url: "/bill/list",
@@ -106,8 +106,8 @@
                             $("<td></td>").text(data[str]['id']).addClass("view_btn").appendTo(tr);
                             $("<td></td>").text(data[str]['name']).addClass("view_btn").appendTo(tr);
                             $("<td></td>").text(FormatToUnixtime(data[str]['startTime'])).addClass("view_btn").appendTo(tr);
-                            $("<td></td>").text(data[str]['tt']).addClass("view_btn").appendTo(tr);
-                            $("<td></td>").checkbox(data[null]).addClass("view_btn").appendTo(tr);  //체크박스 넣어서 선택한 사물함만 결제할수있도록 하자
+                            $("<td></td>").text(Math.floor(TimeDiff(now,new Date(data[str]['startTime']))* 0.001541666)+ " 원").addClass("view_btn").appendTo(tr);
+                            $("<td><input name='rowCheck' type='checkbox' value='${id}'/></td>").appendTo(tr);
                         }
                     },
                     /*error: function(error) {
@@ -137,13 +137,20 @@
                     });
                 });
 
+                function TimeDiff(unixtime1,unixtime2) {
+                    var t1 = new Date(unixtime1);
+                    var t2 = new Date(unixtime2);
+                    return parseInt(t1-t2);
+                };
+
                 function FormatToUnixtime(unixtime) {
                     var u = new Date(unixtime);
+                    console.log("u: " + u);
                     return u.getUTCFullYear() +
-                        '-' + ('0' + u.getUTCMonth()).slice(-2) +
-                        '-' + ('0' + u.getUTCDate()).slice(-2)
-                     ' ' + ('0' + u.getUTCHours()).slice(-2) +
-                     ':' + ('0' + u.getUTCMinutes()).slice(-2)
+                        '-' + ('0' + u.getMonth()).slice(-2) +
+                        '-' + ('0' + u.getDate()).slice(-2) +
+                        ' ' + ('0' + u.getHours()).slice(-2) +
+                        ':' + ('0' + u.getMinutes()).slice(-2)
                     // ':' + ('0' + u.getUTCSeconds()).slice(-2)
                 };
             });
