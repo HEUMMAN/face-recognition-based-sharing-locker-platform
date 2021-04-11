@@ -31,16 +31,7 @@ public class AddFacesToCollection {
 
     public static void main(String[] args) throws Exception {
 
-        AWSCredentials credentials = new BasicAWSCredentials("AKIA4EPX72XC3ACFOWVU", "BnW0X9nSPsqJN07KXgjKreizEa4Q7BI4I9Qdrytd");
-
-        //AmazonRekognition rekognitionClient = AmazonRekognitionClientBuilder.defaultClient();
-
-//        BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIA4EPX72XC3ACFOWVU", "BnW0X9nSPsqJN07KXgjKreizEa4Q7BI4I9Qdrytd");
-//        AmazonRekognition rekognitionClient = AmazonRekognitionClientBuilder
-//                .standard()
-//                .withRegion(Regions.AP_NORTHEAST_2)
-//                .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
-//                .build();
+        AWSCredentials credentials = new BasicAWSCredentials("key", "key");
 
         AmazonRekognition rekognitionClient = AmazonRekognitionClientBuilder
                 .standard()
