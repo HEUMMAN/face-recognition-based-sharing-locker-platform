@@ -1,10 +1,7 @@
 package Fabinet.Fabinet.AwsCollection;
 
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.rekognition.AmazonRekognition;
 import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
@@ -15,51 +12,79 @@ import com.amazonaws.services.rekognition.model.IndexFacesResult;
 import com.amazonaws.services.rekognition.model.QualityFilter;
 import com.amazonaws.services.rekognition.model.S3Object;
 import com.amazonaws.services.rekognition.model.UnindexedFace;
+import com.amazonaws.services.rekognition.model.transform.IndexFacesResultJsonUnmarshaller;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.JSONType;
+import org.json.simple.JSONObject;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.nio.ByteBuffer;
+import java.util.Base64;
 import java.util.List;
 
 public class AddFacesToCollection {
     public static final String collectionId = "Collection";
-    public static final String bucket = "fabinet";
-    public static final String photo = "juyoung.jpg";
+    public static final String bucket = "bucket";
+    public static final String photo = "lshlsh.jpg";
     public static final byte[] Bytephoto = {112,114,116};
 
     public static void main(String[] args) throws Exception {
 
-        AWSCredentials credentials = new BasicAWSCredentials("AKIA4EPX72XC3ACFOWVU", "BnW0X9nSPsqJN07KXgjKreizEa4Q7BI4I9Qdrytd");
-
-        //AmazonRekognition rekognitionClient = AmazonRekognitionClientBuilder.defaultClient();
-
-//        BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIA4EPX72XC3ACFOWVU", "BnW0X9nSPsqJN07KXgjKreizEa4Q7BI4I9Qdrytd");
-//        AmazonRekognition rekognitionClient = AmazonRekognitionClientBuilder
-//                .standard()
-//                .withRegion(Regions.AP_NORTHEAST_2)
+        BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIA4EPX72XC3ACFOWVU", "BnW0X9nSPsqJN07KXgjKreizEa4Q7BI4I9Qdrytd");
+//        private final AmazonS3 s3 = AmazonS3ClientBuilder.standard()
+//                .withRegion(Regions.fromName("ap-northeast-2"))
 //                .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
+//                .disableChunkedEncoding()
 //                .build();
 
         AmazonRekognition rekognitionClient = AmazonRekognitionClientBuilder
                 .standard()
                 .withRegion(Regions.fromName("ap-northeast-2"))
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
                 .build();
+
+
 
         Image image = new Image()
                 .withS3Object(new S3Object()
                         .withBucket(bucket)
                         .withName(photo));
 
+
+//        String json = "{'Bytes' : Bytephoto}";
+//        Base64.Encoder encoder = Base64.getEncoder();
+//        byte[] encodedBytes = encoder.encode(Bytephoto);
+//        ByteArrayInputStream bis = new ByteArrayInputStream(Bytephoto);
+//        BufferedImage bImage2 = ImageIO.read(bis);
+//
+//        ByteBuffer buf = ByteBuffer.wrap(encodedBytes);
+//        //Image image = new Image().withBytes(buf);
+        JSONObject img = new JSONObject();
+        img.put("Bytes", Bytephoto);
+
+        JSONObject json = new JSONObject();
+        json.put("CollectionId",  "Collection"); // key는 "name", value는 "송요시"
+        json.put("DetectionAttributes", "DEFAULT");
+        json.put("ExternalImageId", "lshlsh.jpg");
+        json.put("Image", img);
+        json.put("MaxFaces", 1);
+        json.put("QualityFilter", "AUTO");
+
         IndexFacesRequest indexFacesRequest = new IndexFacesRequest()
-                .withImage(image)   //여기 바로 바이트배열로 넣자
+                //.withImage(photo)   //여기 바로 바이트배열로 넣자
                 .withQualityFilter(QualityFilter.AUTO)
                 .withMaxFaces(1)
                 .withCollectionId(collectionId)
                 .withExternalImageId(photo)
                 .withDetectionAttributes("DEFAULT");
+
+
+        //var jsonn = "Bytes": Bytephoto;
+//        IndexFacesResult indexFacesResult = rekognitionClient
+//                .indexFaces(collectionId,"DEFAULT",photo,{"Bytes": Bytephoto},1,"AUTO");
 
         IndexFacesResult indexFacesResult = rekognitionClient.indexFaces(indexFacesRequest);
 
