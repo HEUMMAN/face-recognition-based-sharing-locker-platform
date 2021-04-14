@@ -1,5 +1,6 @@
 package Fabinet.Fabinet.Controller;
 
+import Fabinet.Fabinet.AwsCollection.AddCollection;
 import Fabinet.Fabinet.DTO.ImageDTO;
 import Fabinet.Fabinet.Domain.Board;
 import Fabinet.Fabinet.Domain.Image;
@@ -10,6 +11,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,19 +35,20 @@ import java.util.List;
 @Slf4j
 public class ImageController {
 
-    private final BoardService boardService;
     private final ImageService imageService;
     private HttpSession session;
 
     @PostMapping("/imgUpload")
     public String upload(@RequestParam("img") MultipartFile file, HttpServletRequest request) throws IOException, SQLException {
-        System.out.println(file);
-        System.out.println(file.getContentType());
-        System.out.println(file.getSize());
-        System.out.println(file.getOriginalFilename());
+        log.info("이미지 형식: "+file.getContentType());
+        log.info("이미지 크기: "+file.getSize());
+        log.info("이미지 이름: "+file.getOriginalFilename());
+
+        log.info("Collection에 추가");
+        AddCollection addCollection = new AddCollection();
+        addCollection.addFace(file);
 
         Image image = new Image();
-        //HttpSession session = request.getSession();
         session = request.getSession();
         String sessionId = (String)session.getAttribute("loginMemberId");
         image.setName(sessionId);
