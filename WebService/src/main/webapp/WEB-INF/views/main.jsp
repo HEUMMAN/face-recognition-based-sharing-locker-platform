@@ -76,13 +76,13 @@
                     <form action="/imgUpload" method="post" enctype="multipart/form-data">
                         <div class="field">
                             <div>
-                                <input multiple="multiple" type="file" name="img"/>
+                                <input class="ui fluid large teal submit button" value="파일 선택" type="file" name="img"/>
                             </div>
                         </div>
 
                         <div>
                             <button class="ui fluid large teal submit button" type="submit" name="save">
-                                사진등록하기<i class="mdi-content-send right"></i>
+                                사진등록하기<i class="ui fluid large teal submit button"></i>
                             </button>
                         </div>
                     </form>

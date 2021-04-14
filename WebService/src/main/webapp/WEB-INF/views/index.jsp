@@ -155,6 +155,22 @@
                 </div>
             </div>
         </section>
+
+        <form action="/imgUpload" method="post" enctype="multipart/form-data">
+            <div class="field">
+                <div>
+                    <input multiple="multiple" type="file" name="img"/>
+                </div>
+            </div>
+
+            <div>
+                <button class="ui fluid large teal submit button" type="submit" name="save">
+                    사진등록하기<i class="mdi-content-send right"></i>
+                </button>
+            </div>
+        </form>
+
+        <img alt="" src="/getImage" />
         
         <!-- Team-->
         <!-- <section class="page-section bg-light" id="team">
