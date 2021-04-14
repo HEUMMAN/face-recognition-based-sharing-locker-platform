@@ -16,7 +16,7 @@ public class MqttMain {
         //해당 함수를 생성자로 넣어줌
         MyMqttClient client = new MyMqttClient(pdk);
 
-        client.init("접속아이디", "접속비번", "tcp://주소:1883", "고유아이디")
+        client.init("heum", "접속비번", "tcp://3.34.255.198:1883", "고유아이디")
                 .subscribe(new String[]{"구독할주제1","구독할주제2"});
 
 
