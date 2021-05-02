@@ -9,13 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true) //트랜섹셔널해줘야함
+@Transactional(readOnly = true) 
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService{
 
     private final MemberRepositoryImpl memberRepository;
 
-    @Transactional  //트랜섹셔널해줘야함
+    @Transactional
     public String join(Member member){
         memberRepository.save(member);
         return member.getLoginId();
@@ -49,7 +49,6 @@ public class MemberServiceImpl implements MemberService{
 
     //올바른 회원정보로 로그인을 시도했는가?
     public String isExistId(String id){
-        //이거 널로 안받아지는게 문제다
         Member findMember = memberRepository.findOne(id);
         System.out.println("findMember: "+findMember);
         if(findMember == null){
