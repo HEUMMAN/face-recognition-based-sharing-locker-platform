@@ -13,8 +13,8 @@
 * Java, Python, C
 * Html, Css, Javascript
 ## 3.2. Tools
-* SpringBoot, AWS EC2, AWS MySqlm JPA
-* OpenCV library, AWS Face Rekognition
+* SpringBoot, AWS EC2, AWS MySql, JPA
+* OpenCV, AWS Face Rekognition
 * ODROID-N2, ESP8266
 ****
 # 4. Result
