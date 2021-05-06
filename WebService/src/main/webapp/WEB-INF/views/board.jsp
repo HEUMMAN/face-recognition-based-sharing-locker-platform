@@ -132,6 +132,7 @@
                             $("<td></td>").text(data[str]['title']).addClass("view_btn").appendTo(tr);
                             $("<td></td>").text(data[str]['author']).addClass("view_btn").appendTo(tr);
                             $("<td></td>").text(FormatToUnixtime(data[str]['date'])).addClass("view_btn").appendTo(tr);
+                            //여기에 a태그를 삽입하는 방식으로 일반 웹페이지들은 동작하는듯?
                         }
                     },
                     /*error: function(error) {
