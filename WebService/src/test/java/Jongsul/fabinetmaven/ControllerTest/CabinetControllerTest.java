@@ -1,9 +1,5 @@
 package Jongsul.fabinetmaven.ControllerTest;
 
-import Jongsul.fabinetmaven.DTO.LoginDTO;
-import Jongsul.fabinetmaven.DTO.RegisterDTO;
-import Jongsul.fabinetmaven.Domain.Cabinet;
-import Jongsul.fabinetmaven.Domain.Member;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
@@ -19,8 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import java.util.Date;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
