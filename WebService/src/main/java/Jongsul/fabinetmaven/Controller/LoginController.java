@@ -33,13 +33,7 @@ public class LoginController {
     private final ImageService imageService;
     private final String salt = "haha";
 
-    BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIAID7ORZRGXAVUBEXA", "AXgZBzrc/y4KzejD35GLZomcjYkm/dti40s642hE");
-    private final AmazonS3 s3 = AmazonS3ClientBuilder.standard()
-            .withRegion(Regions.fromName("ap-northeast-2"))
-            .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
-            .disableChunkedEncoding()
-            .build();
-
+    //민감한 키는 AwsConfig class에 옮겨둠
 
     @PostMapping("/login")
     public void doLogin(@RequestBody LoginDTO loginDTO, HttpServletResponse response, HttpSession session) throws IOException {
@@ -70,13 +64,7 @@ public class LoginController {
     @PostMapping("/register")
     public void doRegister(@RequestBody RegisterDTO registerDTO, HttpServletResponse response) throws IOException {
 
-        System.out.println("이름: "+registerDTO.getUserName());
-        System.out.println("로그인 아이디: "+registerDTO.getUserID());
-        System.out.println("로그인 비밀번호: "+registerDTO.getUserPW());
-        System.out.println("로그인 비밀번호 확인: "+registerDTO.getUserPW2());
-        System.out.println("전화번호: "+registerDTO.getUserTel());
-        System.out.println("이메일: "+registerDTO.getUserEmail());
-        System.out.println("이미지: "+registerDTO.getU_img());
+        log.info(registerDTO.toString());
 
         //SHA256
         SecurityUtil sha = new SecurityUtil();
@@ -88,7 +76,7 @@ public class LoginController {
         //available이면 사용가능한 id
         //occupied면 이미 사용중인 id
         if(result.equals("occupied")){
-            System.out.println("중복 if문");
+            System.out.println("이미 등록된 ID");
             response.getWriter().write("occupied");
             return;
         }
@@ -98,12 +86,13 @@ public class LoginController {
             return;
         }
         System.out.println("중복검사 통과");
-        Member member = new Member();
-        member.setLoginId(registerDTO.getUserID());
-        member.setLoginPassword(encryptPassword);
-        member.setName(registerDTO.getUserName());
-        member.setEmail(registerDTO.getUserEmail());
-        member.setTel(registerDTO.getUserTel());
+        Member member = Member.builder()
+                .name(registerDTO.getUserName())
+                .loginId(registerDTO.getUserID())
+                .loginPassword(encryptPassword)
+                .Email(registerDTO.getUserEmail())
+                .tel(registerDTO.getUserTel())
+                .build();
 
 //        //python에서 얼굴조회를 해야하기에 얼굴테이블을 따로 분리하여 만들었다.
 //        Image image = new Image();
