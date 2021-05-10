@@ -15,12 +15,7 @@ import java.util.List;
 public class AddCollection {
     public static final String collectionId = "Collection";
 
-    BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIA4EPX72XC3ACFOWVU", "BnW0X9nSPsqJN07KXgjKreizEa4Q7BI4I9Qdrytd");
-    AmazonRekognition rekognitionClient = AmazonRekognitionClientBuilder
-            .standard()
-            .withRegion(Regions.fromName("ap-northeast-2"))
-            .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
-            .build();
+    //AWS Client 인증키를 새로운 class로 분리 후 github에 업로드 안함, 테스트 필요
 
     //MultipartFile -> byte[] 변환 후 바로 Collection에 올리기
     public void addFace(MultipartFile mfile) throws IOException {
@@ -37,7 +32,8 @@ public class AddCollection {
                 .withExternalImageId(userName)
                 .withDetectionAttributes("DEFAULT");
 
-        IndexFacesResult indexFacesResult = rekognitionClient.indexFaces(indexFacesRequest);
+        //IndexFacesResult indexFacesResult = rekognitionClient.indexFaces(indexFacesRequest);
+        IndexFacesResult indexFacesResult = AwsConfig.getAmazonRekognition().indexFaces(indexFacesRequest);
 
         System.out.println("Results for " + userName);
         System.out.println("Faces indexed:");
