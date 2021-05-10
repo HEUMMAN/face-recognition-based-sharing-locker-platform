@@ -1,14 +1,17 @@
 package Jongsul.fabinetmaven.Domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Getter @Setter
+@Getter
+@NoArgsConstructor
 public class Cabinet {
 
     @Id
@@ -26,4 +29,14 @@ public class Cabinet {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
+
+    @Builder
+    public Cabinet(String name, String building, String floor, String number, Date startTime, Member member) {
+        this.name = name;
+        this.building = building;
+        this.floor = floor;
+        this.number = number;
+        this.startTime = startTime;
+        this.member = member;
+    }
 }

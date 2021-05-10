@@ -63,8 +63,7 @@ public class BoardController {
         Board board = new Board();
         if(sessionId!=null){
             Member member = memberService.findOne(sessionId);
-            System.out.println("Member name: "+member.getName());
-            System.out.println("Member loginID: "+member.getLoginId());
+            log.info("\nMember name: "+member.getName()+"\nMember loginID: "+member.getLoginId());
             board.setAuthor(sessionId);
             board.setMember(member);
         }
@@ -76,10 +75,7 @@ public class BoardController {
         board.setContent(boardDTO.getContent());
         board.setDate(now);
 
-        System.out.println("제목: "+boardDTO.getTitle());
-        System.out.println("내용: "+boardDTO.getContent());
-        System.out.println("시간: "+now);
-        System.out.println("작성자: "+sessionId);
+        log.info(boardDTO.toString()+"\n"+now+"\n"+sessionId);
 
         String result = boardService.createBoard(board);
         log.info("["+result+"]에 대한 게시글 등록 완료");

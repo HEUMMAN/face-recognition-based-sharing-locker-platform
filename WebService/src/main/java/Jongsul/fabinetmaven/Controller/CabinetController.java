@@ -35,7 +35,7 @@ public class CabinetController {
     //(가능한 사물함을 모두 적어놓은 목록)을 따로 클래스를 만들어서 미리 정의해놓자
 
     //사물함 사용시간을 LocalDateTime에서 Date로 바꿨다. 사물함 추가하기 기능 구현하고 확인해보자
-    @GetMapping("list")
+    @GetMapping("/list")
     public List<Cabinet> showEntireBill(HttpServletRequest request){
         HttpSession session = request.getSession();
         Member member = memberService.findOne((String) session.getAttribute("loginMemberId"));
@@ -89,10 +89,15 @@ public class CabinetController {
         HttpSession session = request.getSession();
         String sessionId = (String)session.getAttribute("loginMemberId");
 
-        Cabinet cabinet = new Cabinet();
-        cabinet.setName(select1+"-"+select2+"-"+select3);
-        cabinet.setMember(memberService.findOne(sessionId));
-        cabinet.setStartTime(new Date());
+        Cabinet cabinet = Cabinet.builder()
+                .building(select1)
+                .floor(select2)
+                .number(select3)
+                .name(select1+"-"+select2+"-"+select3)
+                .member(memberService.findOne(sessionId))
+                .startTime(new Date())
+                .build();
+
         cabinetService.chooseCanibet(cabinet);
 
         return "redirect:/";

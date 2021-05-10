@@ -17,4 +17,13 @@ public class RegisterDTO {
     private String userEmail;
     private String userTel;
     private Blob u_img;
+
+    @Override
+    public String toString() {
+        return "\nName: "+userName
+                +"\nloginID: "+userID
+                +"\nloginPassword: "+userPW
+                +"\ntel: "+userTel
+                +"\nEmail: "+userEmail;
+    }
 }

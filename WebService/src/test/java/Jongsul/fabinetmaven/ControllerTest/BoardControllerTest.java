@@ -2,15 +2,21 @@ package Jongsul.fabinetmaven.ControllerTest;
 
 import Jongsul.fabinetmaven.DTO.BoardDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -29,19 +35,38 @@ public class BoardControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-    private final String title = "This is test title3";
-    private final String content = "This is test content3";
+    private final String title = "This is test title5";
+    private final String content = "This is test content5";
+
+    protected MockHttpSession session;
+    protected MockHttpServletRequest request;
+
+    @Before
+    public void setup(){
+        session = new MockHttpSession();
+        session.setAttribute("loginMemberId", "zxcv");
+
+        request = new MockHttpServletRequest();
+        request.setSession(session);
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+    }
+
+    @After
+    public void clear(){
+        session.clearAttributes();
+        session = null;
+    }
 
 
     @Test
-    public void 게시글불러오기() throws Exception {
+    public void 게시글_전체_불러오기() throws Exception {
         //when
         mvc.perform(get("/board/post"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void 게시글작성하기() throws Exception {
+    public void 게시글_작성하기() throws Exception {
         //given
         BoardDTO boardDTO = new BoardDTO();
         boardDTO.setTitle(title);
@@ -52,6 +77,7 @@ public class BoardControllerTest {
 
         //then
         mvc.perform(post("/board/post")
+                .session(session)
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -61,7 +87,7 @@ public class BoardControllerTest {
     }
 
     @Test
-    public void 게시글1개불러오기() throws Exception {
+    public void 게시글_1개_불러오기() throws Exception {
         mvc.perform(get("/board/1"))
                 .andExpect(status().isOk());
     }

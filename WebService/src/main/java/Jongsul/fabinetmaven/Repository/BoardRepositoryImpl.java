@@ -18,7 +18,7 @@ public class BoardRepositoryImpl implements BoardRepository{
     @Override
     public void save(Board board) {
         em.persist(board);
-        System.out.println("persist 완료");
+        log.info("psersist 완료");
     }
     @Override
     public List<Board> findAll(){

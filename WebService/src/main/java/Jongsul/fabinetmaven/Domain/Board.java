@@ -1,7 +1,9 @@
 package Jongsul.fabinetmaven.Domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor
 public class Board {
 
     @Id
@@ -24,4 +27,13 @@ public class Board {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "LOGIN_ID")
     private Member member;
+
+    @Builder
+    public Board(String title, String content, String author, LocalDateTime date, Member member) {
+        this.title = title;
+        this.content = content;
+        this.author = author;
+        this.date = date;
+        this.member = member;
+    }
 }

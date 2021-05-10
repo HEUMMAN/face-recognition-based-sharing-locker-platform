@@ -32,11 +32,11 @@ public class LoginControllerTest {
     public void 회원가입() throws Exception {
         //given
         RegisterDTO inputMember = new RegisterDTO();
-        inputMember.setUserID("ddff");
-        inputMember.setUserPW("vvbb");
-        inputMember.setUserPW2("vvbb");
+        inputMember.setUserID("bnbn");
+        inputMember.setUserPW("bnbn");
+        inputMember.setUserPW2("bnbn");
         inputMember.setUserEmail("fffd@naver.com");
-        inputMember.setUserName("hong");
+        inputMember.setUserName("Kang");
         inputMember.setUserTel("010-1234-5678");
         String content = objectMapper.writeValueAsString(inputMember); //Object to Json
 

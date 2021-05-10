@@ -13,6 +13,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -25,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @AutoConfigureMockMvc
+@Transactional
 public class CabinetControllerTest {
 
     @Autowired
@@ -64,9 +66,9 @@ public class CabinetControllerTest {
     @Test
     public void 사물함_사용하기() throws Exception {
         mvc.perform(post("/bill/chooseCabinet")
-                .param("select1","B")
-                .param("select2","4")
-                .param("select3","21")
+                .param("select1","D")
+                .param("select2","1")
+                .param("select3","5")
                 .session(session)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
