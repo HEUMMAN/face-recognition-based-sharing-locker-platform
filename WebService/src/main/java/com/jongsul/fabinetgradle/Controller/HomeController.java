@@ -1,5 +1,6 @@
 package com.jongsul.fabinetgradle.Controller;
 
+import com.jongsul.fabinetgradle.Mqtt.MqttSubscribeUserID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +15,8 @@ import javax.servlet.http.HttpSession;
 public class HomeController {
     @RequestMapping("/")    //첫 화면
     public String home(){
-        log.info("mustache home controller plz");
+        log.info("home controller");
+//        log.info("Mqtt Subscriber 실행");
         return "index";
     }
 

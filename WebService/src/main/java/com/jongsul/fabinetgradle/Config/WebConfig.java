@@ -16,7 +16,8 @@ public class WebConfig implements WebMvcConfigurer {
                         .addPathPatterns("/boards")
                         .addPathPatterns("/cabinets")
                         .addPathPatterns("/adjustment")
-                        .addPathPatterns("/upload");
+                        .addPathPatterns("/upload")
+                        .addPathPatterns("/mypage");
             }
         };
     }

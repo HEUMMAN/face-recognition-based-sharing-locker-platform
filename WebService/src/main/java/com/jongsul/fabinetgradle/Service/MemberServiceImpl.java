@@ -1,22 +1,39 @@
 package com.jongsul.fabinetgradle.Service;
 
+import com.jongsul.fabinetgradle.Config.SecurityUtil;
+import com.jongsul.fabinetgradle.DTO.RegisterDTO;
 import com.jongsul.fabinetgradle.Domain.Member;
 import com.jongsul.fabinetgradle.Repository.MemberRepositoryImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true) //트랜섹셔널해줘야함
+@Slf4j
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService{
 
     private final MemberRepositoryImpl memberRepository;
+    private final String salt = "haha";
 
-    @Transactional  //트랜섹셔널해줘야함
-    public String join(Member member){
+    @Transactional
+    public String join(RegisterDTO registerDTO){
+
+        SecurityUtil sha = new SecurityUtil();
+        String encryptPassword = sha.encryptSHA256(registerDTO.getUserPW()+salt);
+
+        Member member = Member.builder()
+                .name(registerDTO.getUserName())
+                .loginId(registerDTO.getUserID())
+                .loginPassword(encryptPassword)
+                .Email(registerDTO.getUserEmail())
+                .tel(registerDTO.getUserTel())
+                .build();
+
         memberRepository.save(member);
         return member.getLoginId();
     }
@@ -47,9 +64,7 @@ public class MemberServiceImpl implements MemberService{
         }
     }
 
-    //올바른 회원정보로 로그인을 시도했는가?
     public String isExistId(String id){
-        //이거 널로 안받아지는게 문제다
         Member findMember = memberRepository.findOne(id);
         System.out.println("findMember: "+findMember);
         if(findMember == null){

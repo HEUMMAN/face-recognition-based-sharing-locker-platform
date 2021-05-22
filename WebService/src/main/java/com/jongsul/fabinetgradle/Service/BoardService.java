@@ -1,14 +1,14 @@
 package com.jongsul.fabinetgradle.Service;
 
+import com.jongsul.fabinetgradle.DTO.BoardDTO;
 import com.jongsul.fabinetgradle.Domain.Board;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface BoardService {
 
-    public String createBoard(Board board);
-
-    public List<Board> findBoards();
-
-    public Board findOne(long id);
+    Board createBoard(BoardDTO boardDTO, HttpServletRequest request);
+    List<Board> findBoards();
+    Board findOne(long id);
 }

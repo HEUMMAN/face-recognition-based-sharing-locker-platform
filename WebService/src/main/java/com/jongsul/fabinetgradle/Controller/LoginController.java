@@ -8,6 +8,8 @@ import com.jongsul.fabinetgradle.Service.ImageService;
 import com.jongsul.fabinetgradle.Service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +35,7 @@ public class LoginController {
     @PostMapping("/login")
     public void doLogin(@RequestBody LoginDTO loginDTO, HttpServletResponse response, HttpSession session) throws IOException {
 
-        System.out.println("Input id: "+loginDTO.getUserID()+", Input pw: "+loginDTO.getUserPW());
+        log.info("Input id: "+loginDTO.getUserID()+", Input pw: "+loginDTO.getUserPW());
 
         //SHA256
         SecurityUtil sha = new SecurityUtil();
@@ -61,41 +63,21 @@ public class LoginController {
 
         log.info(registerDTO.toString());
 
-        //SHA256
-        SecurityUtil sha = new SecurityUtil();
-        String encryptPassword = sha.encryptSHA256(registerDTO.getUserPW()+salt);
-        System.out.println("인코딩된 비밀번호: "+ encryptPassword);
-
-        //AJAX쪽 변수이름과 DTO의 변수이름이 같아야 받아짐
-        String result = memberService.isExistId(registerDTO.getUserID()); //입력받은 id가 이미 사용중인지 확인 위함
-        //available이면 사용가능한 id
-        //occupied면 이미 사용중인 id
-        if(result.equals("occupied")){
-            System.out.println("이미 등록된 ID");
-            response.getWriter().write("occupied");
-            return;
-        }
+        String result = memberService.isExistId(registerDTO.getUserID());
         if(!registerDTO.getUserPW().equals(registerDTO.getUserPW2())){    //비밀번호 확인이 틀릴경우
             System.out.println("비밀번호확인이 틀림");
             response.getWriter().write("wrongCheck");
             return;
         }
-        System.out.println("중복검사 통과");
-        Member member = Member.builder()
-                .name(registerDTO.getUserName())
-                .loginId(registerDTO.getUserID())
-                .loginPassword(encryptPassword)
-                .Email(registerDTO.getUserEmail())
-                .tel(registerDTO.getUserTel())
-                .build();
-
-//        //python에서 얼굴조회를 해야하기에 얼굴테이블을 따로 분리하여 만들었다.
-//        Image image = new Image();
-//        image.setImage(registerVO.getU_img());
-//        imageService.join(image);
-        
-        String afterJoin = memberService.join(member);
-        System.out.println(afterJoin+" 가입 완료");
-        response.getWriter().write("available");
+        if(result.equals("occupied")){
+            System.out.println("이미 등록된 ID");
+            response.getWriter().write("occupied");
+            return;
+        }
+        else{
+            log.info("중복검사 통과");
+            log.info(memberService.join(registerDTO)+"가입 완료");
+            response.getWriter().write("available");
+        }
     }
 }

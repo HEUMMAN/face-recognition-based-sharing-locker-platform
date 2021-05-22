@@ -1,26 +1,42 @@
 package com.jongsul.fabinetgradle.Service;
 
+import com.jongsul.fabinetgradle.Config.MemberInformation;
+import com.jongsul.fabinetgradle.DTO.CabinetDTO;
 import com.jongsul.fabinetgradle.Domain.Board;
 import com.jongsul.fabinetgradle.Domain.Cabinet;
+import com.jongsul.fabinetgradle.Domain.CabinetHistory;
 import com.jongsul.fabinetgradle.Domain.Member;
+import com.jongsul.fabinetgradle.Repository.CabinetHistoryRepository;
 import com.jongsul.fabinetgradle.Repository.CabinetRepository;
 import com.jongsul.fabinetgradle.Repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class CabinetServiceImpl implements CabinetService{
 
+    private final MemberInformation memberInformation;
     private final CabinetRepository cabinetRepository;
+    private final CabinetHistoryRepository cabinetHistoryRepository;
     private final MemberRepository memberRepository;
 
     @Override
     public List<Cabinet> findAllByID(Member member){
         return cabinetRepository.findAllbyName(member);
+    }
+
+    @Override
+    public List<String> getAllCabinet() {
+        return cabinetRepository.getAllCabinet();
     }
 
     @Override
@@ -63,8 +79,27 @@ public class CabinetServiceImpl implements CabinetService{
 
     @Override
     @Transactional
-    public String chooseCanibet(Cabinet cabinet) {
+    public String chooseCanibet(CabinetDTO cabinetDTO, HttpServletRequest request) {
+        log.info("선택한 사물함 번호: "+cabinetDTO.getSelectOne());
+        String[] temp = cabinetDTO.getSelectOne().split("-");
+        Cabinet cabinet = Cabinet.builder()
+                .building(temp[0])
+                .floor(temp[1])
+                .number(temp[2])
+                .name(cabinetDTO.getSelectOne())
+                .member(memberRepository.findOne(memberInformation.getUserName(request)))
+                .startTime(new Date())
+                .build();
+        CabinetHistory cabinetHistory = CabinetHistory.builder()
+                .building(temp[0])
+                .floor(temp[1])
+                .number(temp[2])
+                .name(cabinetDTO.getSelectOne())
+                .member(memberRepository.findOne(memberInformation.getUserName(request)))
+                .startTime(new Date())
+                .build();
         cabinetRepository.save(cabinet);
-        return "OK";
+        cabinetHistoryRepository.save(cabinetHistory);
+        return cabinet.getName();
     }
 }
