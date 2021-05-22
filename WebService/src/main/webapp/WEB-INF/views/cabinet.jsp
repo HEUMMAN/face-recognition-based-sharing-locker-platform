@@ -39,50 +39,24 @@
                         <br>
                         <h1 class="h4 text-gray-900 mb-4">사용할 사물함을 선택하세요</h1>
                     </div>
-
                     <div class="row" style=" display: inline-block; text-align: center;">
-                        <form class="user">
+
                             <div class="card mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">옵션 선택</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">사물함 선택</h6>
                                 </div>
                                 <div class="card-body">
-                                        <button class="btn btn-secondary dropdown-toggle" type="button"
-                                            id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">
-                                            건물
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-
-                                        <button class="btn btn-secondary dropdown-toggle" type="button"
-                                            id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">
-                                            층
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-
-                                        <button class="btn btn-secondary dropdown-toggle" type="button"
-                                            id="dropdownMenuButton3" data-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">
-                                            번호
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
+                                    <select name="selectCabinet" class="btn btn-secondary dropdown-toggle" id="selectCabinet">
+                                        <option id="opt1">========선택하기========</option>
+                                    </select>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-user btn-block">사용하기</button>
-                        </form>
+<%--                            <button type="submit"--%>
+<%--                                    onClick="location.href='/'"--%>
+<%--                                    class="btn btn-primary btn-user btn-block">사용하기</button>--%>
+
+                        <div class="btn btn-primary btn-user btn-block" id = "selectCabinetBtn">사용시작</div>
+
                         <br><br>
                     </div>
                 </div>
@@ -118,5 +92,51 @@
         <script src="assets/mail/contact_me.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
+        <script>
+            $(document).ready(function() {
+                $.ajax({
+                    type: "get",
+                    url: "/bill/cabinets",
+                    dataType: "json",
+                    cache: false,
+                    success: function (data) {
+                        console.log(data);
+                        $('#selectCabinet').empty();
+                        $.each(data, function (key, value) {
+                            $('#selectCabinet').append('<option value="' + value + '">' + value + '</option>');
+                        });
+                    },
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function(){
+                $("#selectCabinetBtn").click(function(){
+                    var json = {
+                        selectOne : $("#selectCabinet option:selected").val()
+                    };
+
+                    $.ajax({
+                        type : "POST",
+                        url : "/bill/chooseCabinet",
+                        data : JSON.stringify(json),
+                        contentType: 'application/json',
+                        success : function(data) {
+                            console.log(data);
+                            if (data == 'occupied') {
+                                alert('이미 사용중인 자리입니다.');
+                            }
+                            else if(data == 'available'){
+                                alert('사용 시작');
+                                location.href = "/";
+                            }
+                        },
+                        error: function (error) {
+                            alert("오류 발생" + this.data);
+                        }
+                    });
+                });
+            });
+        </script>
     </body>
 </html>
