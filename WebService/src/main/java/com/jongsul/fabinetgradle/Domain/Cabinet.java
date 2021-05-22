@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,14 +15,13 @@ import java.util.Date;
 public class Cabinet {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;        //빌딩-층-번호 문자열 조합으로 구성(E-3-24면 E동 3층 24번사물함)
     private String building;
     private String floor;
     private String number;
-    //private LocalDateTime startTime;
     private Date startTime;
 
     @JsonIgnore
