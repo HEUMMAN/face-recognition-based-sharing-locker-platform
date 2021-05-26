@@ -36,6 +36,13 @@ public class CabinetRepositoryImpl implements CabinetRepository{
     }
 
     @Override
+    public List<Cabinet> getOneCabinet(String userID) {
+        log.info(userID+"가 사용중인 사물함 이름");
+        return em.createQuery("select c from Cabinet c where c.member.loginId=:userID",Cabinet.class)
+                .setParameter("userID",userID).getResultList();
+    }
+
+    @Override
     public List<Cabinet> getDate(Member member) {
         return em.createQuery("select m from Cabinet m where m.member = :name", Cabinet.class)
                 .setParameter("name",member).getResultList();

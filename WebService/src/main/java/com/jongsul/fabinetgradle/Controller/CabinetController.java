@@ -4,6 +4,7 @@ import com.jongsul.fabinetgradle.DTO.BillDTO;
 import com.jongsul.fabinetgradle.DTO.CabinetDTO;
 import com.jongsul.fabinetgradle.Domain.Cabinet;
 import com.jongsul.fabinetgradle.Domain.Member;
+import com.jongsul.fabinetgradle.Mqtt4Spring.MqttConfig;
 import com.jongsul.fabinetgradle.Service.CabinetService;
 import com.jongsul.fabinetgradle.Service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,8 @@ public class CabinetController {
     private long passedTime;
     private final List<String> CABINET_LIST
             = Arrays.asList(new String[]{"A-1-1", "A-1-2", "B-1-1", "B-1-2"});
+
+    private final MqttConfig mqttConfig;
 
     //사물함 사용시간을 LocalDateTime에서 Date로 바꿨다. 사물함 추가하기 기능 구현하고 확인해보자
     @GetMapping("/list")
@@ -116,5 +119,12 @@ public class CabinetController {
             log.info(availableCabinet);
         }
         return ResponseEntity.ok(entireCabinet);
+    }
+
+    @GetMapping("/mqtt")
+    public String getCabinetByName(String userID) {
+        log.info("getCabinetByName 실행");
+        List<Cabinet> getCabinets = cabinetService.getCabinetName(userID);
+        return getCabinets.get(0).getName();
     }
 }

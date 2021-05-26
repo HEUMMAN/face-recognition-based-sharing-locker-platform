@@ -1,5 +1,6 @@
 package com.jongsul.fabinetgradle.Mqtt;
 
+import com.jongsul.fabinetgradle.Controller.CabinetController;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
@@ -9,8 +10,7 @@ public class MqttSubscribeUserID extends Thread{
     private static String userName = "default name";
     private static String MQTT_BROKER_URI = "tcp://3.34.255.198:1883";
     private static String SUBSCRIBE_TOPIC = "heum/username";
-
-    @PostConstruct
+    private CabinetController cabinetController;
     public void MqttSub() {
         System.out.println("Mqtt 메서드 실행");
         String findUserName = "";
@@ -33,6 +33,7 @@ public class MqttSubscribeUserID extends Thread{
                     userName = message.toString();
                     //이 메시지 인자에 유저사진명(ID)가 넘어오므로 이것을 사용해서 DB조회하자
                     //여기에 디비조회 넣자
+                    //System.out.println("DB조회한 사물함 이름: "+cabinetController.getCabinetByName(userName));
                 }
 
                 @Override

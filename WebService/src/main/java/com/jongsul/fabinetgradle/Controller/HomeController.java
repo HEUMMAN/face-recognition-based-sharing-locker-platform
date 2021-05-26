@@ -16,7 +16,8 @@ public class HomeController {
     @RequestMapping("/")    //첫 화면
     public String home(){
         log.info("home controller");
-//        log.info("Mqtt Subscriber 실행");
+//        MqttSubscribeUserID mqttSubscribeUserID = new MqttSubscribeUserID();
+//		mqttSubscribeUserID.MqttSub();
         return "index";
     }
 

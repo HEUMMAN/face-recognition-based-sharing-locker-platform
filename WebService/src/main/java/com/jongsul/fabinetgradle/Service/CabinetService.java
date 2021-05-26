@@ -16,4 +16,5 @@ public interface CabinetService {
     String chooseCanibet(CabinetDTO cabinetDTO, HttpServletRequest request);
     List<Cabinet> findAllByID(Member member);
     List<String> getAllCabinet();
+    List<Cabinet> getCabinetName(String userID);
 }

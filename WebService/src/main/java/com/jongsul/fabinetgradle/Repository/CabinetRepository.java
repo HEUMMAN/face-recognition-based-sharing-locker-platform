@@ -14,4 +14,5 @@ public interface CabinetRepository {
     List<Cabinet> getDate(Member member);
     List<Cabinet> findAllbyName(Member member);
     List<String> getAllCabinet();
+    List<Cabinet> getOneCabinet(String userID);
 }
