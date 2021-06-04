@@ -12,7 +12,6 @@ public interface CabinetHistoryRepository {
 
     List<Cabinet> getDate(Member member);
 
-    List<CabinetHistory> findAllbyName(Member member);
+    List<CabinetHistory> findAllbyName(String id);
 
-    List<String> getAllCabinet();
 }

@@ -24,15 +24,10 @@ public class CabinetHistoryRepositoryImpl implements CabinetHistoryRepository{
     }
 
     @Override
-    public List<CabinetHistory> findAllbyName(Member member) {
+    public List<CabinetHistory> findAllbyName(String id) {
         log.info("사용했던 사물함 전체 내역 불러오기");
-        return em.createQuery("select c from CabinetHistory c where c.member=:member", CabinetHistory.class)
-                .setParameter("member",member).getResultList();
-    }
-
-    @Override
-    public List<String> getAllCabinet() {
-        return em.createQuery("select c.name from Cabinet c").getResultList();
+        return em.createQuery("select c from CabinetHistory c where c.member.loginId=:id", CabinetHistory.class)
+                .setParameter("id",id).getResultList();
     }
 
     @Override
