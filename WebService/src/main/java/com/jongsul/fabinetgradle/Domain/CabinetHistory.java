@@ -24,6 +24,7 @@ public class CabinetHistory {
     private String floor;
     private String number;
     private Date startTime;
+    private Date endTime;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,12 +32,13 @@ public class CabinetHistory {
     private Member member;
 
     @Builder
-    public CabinetHistory(String name, String building, String floor, String number, Date startTime, Member member) {
+    public CabinetHistory(String name, String building, String floor, String number, Date startTime, Member member, Date endTime) {
         this.name = name;
         this.building = building;
         this.floor = floor;
         this.number = number;
         this.startTime = startTime;
         this.member = member;
+        this.endTime = endTime;
     }
 }

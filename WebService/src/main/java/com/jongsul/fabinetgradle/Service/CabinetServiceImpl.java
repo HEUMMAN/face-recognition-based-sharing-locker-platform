@@ -46,6 +46,11 @@ public class CabinetServiceImpl implements CabinetService{
     }
 
     @Override
+    public List<Cabinet> getAllCabinetByName(String userID) {
+        return cabinetRepository.getAllCabinet(userID);
+    }
+
+    @Override
     public String calculateBill(Board board) {
         return null;
     }

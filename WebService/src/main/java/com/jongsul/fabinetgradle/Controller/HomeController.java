@@ -73,7 +73,7 @@ public class HomeController {
     }
 
     //결제 api 호출
-    @GetMapping("/adjustment/pay")
+    @GetMapping("/bill/pay")
     public String doPayment(HttpServletRequest request, Model model){
         log.info("결제 API 페이지 이동");
         return "payment";

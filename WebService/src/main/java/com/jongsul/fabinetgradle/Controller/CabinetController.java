@@ -1,5 +1,6 @@
 package com.jongsul.fabinetgradle.Controller;
 
+import com.jongsul.fabinetgradle.Config.MemberInformation;
 import com.jongsul.fabinetgradle.DTO.BillDTO;
 import com.jongsul.fabinetgradle.DTO.CabinetDTO;
 import com.jongsul.fabinetgradle.Domain.Cabinet;
@@ -37,20 +38,36 @@ public class CabinetController {
     private final List<String> CABINET_LIST
             = Arrays.asList(new String[]{"A-1-1", "A-1-2", "B-1-1", "B-1-2"});
 
-    private final MqttConfig mqttConfig;
+    private final MemberInformation memberInformation;
+    private int money = -1;
 
     //사물함 사용시간을 LocalDateTime에서 Date로 바꿨다. 사물함 추가하기 기능 구현하고 확인해보자
     @GetMapping("/list")
     public List<Cabinet> showEntireBill(HttpServletRequest request){
-        HttpSession session = request.getSession();
-        Member member = memberService.findOne((String) session.getAttribute("loginMemberId"));
+        Member member = memberService.findOne(memberInformation.getUserName(request));
         List<Cabinet> cabinets = cabinetService.findAllByID(member);    //멤버를 통해 해당 사용자가 사용중인 사물함 리스트 가져오기
         System.out.println("=====사용중인 사물함=====");
+        Date now = new Date();
+
         for(Cabinet a : cabinets){
+            System.out.println("현재시각: "+ now.getTime());
+            System.out.println("사용시각: "+ a.getStartTime().getTime());
+            long diffDate = now.getTime() - a.getStartTime().getTime();
+            System.out.println("diffDate: "+diffDate);
+            money += diffDate;
             System.out.println(a.getName());
         }
-
+        System.out.println("계산된값: "+Math.floor(money*0.00001541666/10)*10+1000);
+        System.out.println("money: "+money);
         return cabinets;
+    }
+
+    @GetMapping("/getMoney")
+    public int getPayMoney(){
+        int ret = money;
+        money = -1;
+        System.out.println("getPayMoney실행: "+money);
+        return ret+1;
     }
 
     //요금 정산 361482526
