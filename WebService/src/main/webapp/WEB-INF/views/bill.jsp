@@ -28,10 +28,10 @@
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"/>
             </div>
         </nav>
+
         <!-- 시작 -->
         <br><br><br>
         <div class="container">
-
             <div class="card o-hidden border-0 shadow-lg my-5">
                 <div class="card-body p-0"  style=" display: inline-block; text-align: center;">
                     <!-- Nested Row within Card Body -->
@@ -71,9 +71,22 @@
                     </div>
                 </div>
             </div>
+
         </div>
         <!-- 끝 -->
 
+        <div class="container">
+            <div class="card o-hidden border-0 shadow-lg my-5" align="center">
+                <h5>합계요금</h5>
+                <br><br>
+                <div id="entiremoney">
+                </div>
+                <div class="ui middle aligned center aligned grid" style="text-align:center">
+                    <a href="/bill/pay"><button class="btn btn-primary btn-xl text-uppercase js-scroll-trigger">결제하기</button></a>
+                    <br>
+                </div>
+            </div>
+        </div>
         
         <!-- Footer-->
         <footer class="footer py-4">
@@ -95,6 +108,7 @@
 
         <script>
             $(document).ready(function() {
+                var entiremoneyVar;
                 var now = new Date();
                 $.ajax({
                     type: "get",
@@ -106,35 +120,14 @@
                             $("<td></td>").text(data[str]['id']).addClass("view_btn").appendTo(tr);
                             $("<td></td>").text(data[str]['name']).addClass("view_btn").appendTo(tr);
                             $("<td></td>").text(FormatToUnixtime(data[str]['startTime'])).addClass("view_btn").appendTo(tr);
-                            $("<td></td>").text(Math.floor(TimeDiff(now,new Date(data[str]['startTime']))* 0.001541666)+ " 원").addClass("view_btn").appendTo(tr);
+                            $("<td></td>").text((Math.floor(TimeDiff(now,new Date(data[str]['startTime']))* 0.00001541666/10)*10+1000)+ " 원").addClass("view_btn").appendTo(tr);
                             $("<td><input name='rowCheck' type='checkbox' value='${id}'/></td>").appendTo(tr);
+                            entiremoneyVar += Math.floor(TimeDiff(now,new Date(data[str]['startTime']))* 0.00001541666/10)*10+1000;
                         }
                     },
                     /*error: function(error) {
                         alert("오류 발생" + error);
                     }*/
-                });
-
-                $(document).on("click", ".view_btn", function() {
-                    var b_no = $(this).parent().attr("data-id");
-
-                    $.ajax({
-                        type: "get",
-                        url: "get_bbs",
-                        data: {
-                            b_no: b_no
-                        },
-                        success: function(data) {
-                            console.log(data);
-                            $("#b_title").text(data['b_title']);
-                            $("#b_review").text(data['b_ownernick'] + " - " +  FormatToUnixtime(data['b_regdate']));
-                            $("#b_content").text(data['b_content']);
-                            $('#view_modal').modal('show');
-                        },
-                        error: function(error) {
-                            alert("읽기 페이지 아직 안만듬" + error);
-                        }
-                    });
                 });
 
                 function TimeDiff(unixtime1,unixtime2) {
@@ -154,7 +147,19 @@
                     // ':' + ('0' + u.getUTCSeconds()).slice(-2)
                 };
             });
+        </script>
 
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $.ajax({
+                    type: "get",
+                    url: "/bill/getMoney",
+                    success: function(data) {
+                        console.log(data);
+                        $("#entiremoney").html(data);
+                    }
+                });
+            });
         </script>
 
         <!-- Bootstrap core JS-->

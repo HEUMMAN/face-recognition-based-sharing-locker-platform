@@ -60,6 +60,17 @@
                                             unDraw &rarr;</a>
                                     </div>
                                 </div>
+                                <div class="col-lg-4 col-sm-6 mb-2">
+                                    <div>
+                                        여기에 개인정보 json으로 받아서 보이기2
+                                        <p>Add some quality, svg illustrations to your project courtesy of <a
+                                                target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
+                                            constantly updated collection of beautiful svg images that you can use
+                                            completely free and without attribution!</p>
+                                        <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
+                                            unDraw &rarr;</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -94,7 +105,7 @@
                     <!-- Nested Row within Card Body -->
                     <div class="text-center">
                         <br>
-                        <h1 class="h4 text-gray-900 mb-4">요금확인</h1>
+                        <h1 class="h4 text-gray-900 mb-4">사용내역</h1>
                     </div>
 
                     <div class="ui middle aligned center aligned grid">
@@ -111,7 +122,7 @@
                                                 <th>번호</th>
                                                 <th>사물함</th>
                                                 <th>시작시간</th>
-                                                <th>요금</th>   <!--몇개 골라서 결제가능하도록-->
+                                                <th>종료시간</th>   <!--몇개 골라서 결제가능하도록-->
                                                 <th>선택</th>
                                             </tr>
                                         </thead>
@@ -122,7 +133,9 @@
                                 </div>
                 
                                 <div class="ui error message"></div>
-                
+                                <div class="ui middle aligned center aligned grid" style="text-align: right">
+                                    <a href="/bill"><button class="btn btn-primary btn-xl text-uppercase js-scroll-trigger">게시글 작성하기</button></a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -131,7 +144,6 @@
         </div>
         <!-- 끝 -->
 
-        
         <!-- Footer-->
         <footer class="footer py-4">
             <div class="container">
@@ -163,7 +175,7 @@
                             $("<td></td>").text(data[str]['id']).addClass("view_btn").appendTo(tr);
                             $("<td></td>").text(data[str]['name']).addClass("view_btn").appendTo(tr);
                             $("<td></td>").text(FormatToUnixtime(data[str]['startTime'])).addClass("view_btn").appendTo(tr);
-                            $("<td></td>").text(Math.floor(TimeDiff(now,new Date(data[str]['startTime']))* 0.001541666)+ " 원").addClass("view_btn").appendTo(tr);
+                            $("<td></td>").text(FormatToUnixtime(data[str]['endTime'])).addClass("view_btn").appendTo(tr);
                             $("<td><input name='rowCheck' type='checkbox' value='${id}'/></td>").appendTo(tr);
                         }
                     },
@@ -171,29 +183,6 @@
                         alert("오류 발생" + error);
                     }*/
                 });
-
-                $(document).on("click", ".view_btn", function() {
-                    var b_no = $(this).parent().attr("data-id");
-
-                    $.ajax({
-                        type: "get",
-                        url: "get_bbs",
-                        data: {
-                            b_no: b_no
-                        },
-                        success: function(data) {
-                            console.log(data);
-                            $("#b_title").text(data['b_title']);
-                            $("#b_review").text(data['b_ownernick'] + " - " +  FormatToUnixtime(data['b_regdate']));
-                            $("#b_content").text(data['b_content']);
-                            $('#view_modal').modal('show');
-                        },
-                        error: function(error) {
-                            alert("읽기 페이지 아직 안만듬" + error);
-                        }
-                    });
-                });
-
                 function TimeDiff(unixtime1,unixtime2) {
                     var t1 = new Date(unixtime1);
                     var t2 = new Date(unixtime2);
