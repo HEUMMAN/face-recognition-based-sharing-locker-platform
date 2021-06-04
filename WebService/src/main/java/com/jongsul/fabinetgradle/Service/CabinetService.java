@@ -17,4 +17,5 @@ public interface CabinetService {
     List<Cabinet> findAllByID(Member member);
     List<String> getAllCabinet();
     List<Cabinet> getCabinetName(String userID);
+    List<Cabinet> getAllCabinetByName(String userID);
 }
