@@ -67,7 +67,15 @@ public class CabinetController {
         int ret = money;
         money = -1;
         System.out.println("getPayMoney실행: "+money);
-        return ret+1;
+        return ret+55;
+    }
+
+    //결제 api 호출
+    @GetMapping("/bill/pay/{id}")
+    public String PaymentPage(@PathVariable("id") String name){
+        log.info("결제 API 페이지 이동WWWW");
+        log.info("input name: "+name);
+        return "payment";
     }
 
     //요금 정산 361482526

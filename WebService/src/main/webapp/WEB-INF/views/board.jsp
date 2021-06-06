@@ -143,6 +143,7 @@
                 $(document).on("click", ".view_btn", function() {
                     var b_no = $(this).parent().attr("data-id");    //이거 글번호 읽기가 안된다 어케하지
                     console.log(b_no);
+                    alert(b_no);
                     $.ajax({
                         type: "get",
                         url: "/board?id="+b_no,
@@ -174,7 +175,6 @@
                     // ':' + ('0' + u.getUTCSeconds()).slice(-2)
                 };
             });
-
         </script>
 
 

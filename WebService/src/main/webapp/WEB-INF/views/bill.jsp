@@ -87,7 +87,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Footer-->
         <footer class="footer py-4">
             <div class="container">
@@ -121,14 +121,40 @@
                             $("<td></td>").text(data[str]['name']).addClass("view_btn").appendTo(tr);
                             $("<td></td>").text(FormatToUnixtime(data[str]['startTime'])).addClass("view_btn").appendTo(tr);
                             $("<td></td>").text((Math.floor(TimeDiff(now,new Date(data[str]['startTime']))* 0.00001541666/10)*10+1000)+ " 원").addClass("view_btn").appendTo(tr);
-                            $("<td><input name='rowCheck' type='checkbox' value='${id}'/></td>").appendTo(tr);
+                            $("<td><div class='btn btn-primary btn-user btn-block' id='pay_btn'>결제하기</div></td>").appendTo(tr);
+
+                            //$("<td><input name='rowCheck' type='checkbox' id='${id}' checked='checked' /></td>").appendTo(tr);
+                            //$("<td><button type='button' class='btn btn-primary' id='pay_btn'>결제하기</button></td>").appendTo(tr);
                             entiremoneyVar += Math.floor(TimeDiff(now,new Date(data[str]['startTime']))* 0.00001541666/10)*10+1000;
                         }
-                    },
+                    }
                     /*error: function(error) {
                         alert("오류 발생" + error);
                     }*/
                 });
+
+                $(document).on("click", ".view_btn", function() {
+                    var b_no = $(this).parent().attr("name");    //이거 글번호 읽기가 안된다 어케하지
+                    console.log(b_no);
+                    console.log(typeof b_no)
+                    $.ajax({
+                        type: "get",
+                        url: "/bill/pay?id="+b_no,
+                        contentType : "application/json; charset=UTF-8",
+                        dataType : "json",
+                        data: {
+                            b_no: b_no
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            location = "/";
+                        },
+                        error: function(error) {
+                            alert("게시글 읽기 페이지 아직 안만듬" + error);
+                        }
+                    });
+                });
+
 
                 function TimeDiff(unixtime1,unixtime2) {
                     var t1 = new Date(unixtime1);
@@ -149,18 +175,35 @@
             });
         </script>
 
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $.ajax({
-                    type: "get",
-                    url: "/bill/getMoney",
-                    success: function(data) {
-                        console.log(data);
-                        $("#entiremoney").html(data);
-                    }
+        <%--<script type="text/javascript">
+            $(document).ready(function(){
+                $("#pay_btn").click(function(){
+                    alert("눌림");
+                    var b_no = $(this).parent().attr("name");    //이거 글번호 읽기가 안된다 어케하지
+                    console.log(b_no);
+                    $.ajax({
+                        type: "get",
+                        url: "/bill/pay?id="+b_no,
+                        contentType : "application/json; charset=UTF-8",
+                        dataType : "json",
+                        data: {
+                            b_no: b_no
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            location.href = "/";
+                            // $("#b_title").text(data['b_title']);
+                            // $("#b_review").text(data['b_ownernick'] + " - " +  FormatToUnixtime(data['b_regdate']));
+                            // $("#b_content").text(data['b_content']);
+                            // $('#view_modal').modal('show');
+                        },
+                        error: function(error) {
+                            alert("게시글 읽기 페이지 아직 안만듬" + error);
+                        }
+                    });
                 });
             });
-        </script>
+        </script>--%>
 
         <!-- Bootstrap core JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
