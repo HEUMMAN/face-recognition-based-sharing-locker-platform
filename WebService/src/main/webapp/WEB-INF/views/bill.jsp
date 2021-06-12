@@ -75,19 +75,6 @@
         </div>
         <!-- 끝 -->
 
-        <div class="container">
-            <div class="card o-hidden border-0 shadow-lg my-5" align="center">
-                <h5>합계요금</h5>
-                <br><br>
-                <div id="entiremoney">
-                </div>
-                <div class="ui middle aligned center aligned grid" style="text-align:center">
-                    <a href="/bill/pay"><button class="btn btn-primary btn-xl text-uppercase js-scroll-trigger">결제하기</button></a>
-                    <br>
-                </div>
-            </div>
-        </div>
-
         <!-- Footer-->
         <footer class="footer py-4">
             <div class="container">
@@ -107,6 +94,13 @@
         </footer>
 
         <script>
+            function payFunc(){
+                var b_no = this.parent;
+                console.log(b_no);
+                alert(b_no);
+            }
+        </script>
+        <script>
             $(document).ready(function() {
                 var entiremoneyVar;
                 var now = new Date();
@@ -114,47 +108,38 @@
                     type: "get",
                     url: "/bill/list",
                     success: function(data) {
-                        console.log(data);
+                        for(var ele in data){
+                            $("#list").append(
+                                "<tr>"+
+                                "<td>"+data[ele].id+"</td>"+
+                                "<td>"+data[ele].name+"</td>"+
+                                "<td>"+FormatToUnixtime(data[ele].startTime)+"</td>"+
+                                "<td>"+TimeDiff(now,data[ele].startTime)+"</td>"+
+                                "<td><a class='btn btn-primary btn-user btn-block' href='/bill/pay/"+data[ele].id+"'>결제하기</a></td>"+
+                                "</tr>"
+
+                            );console.log(data[ele].startTime);
+                        }
+
+                        /*console.log(data);
                         for (var str in data) {
                             var tr = $("<tr></tr>").attr("data-id", data[str]['b_no']).appendTo("#list");
                             $("<td></td>").text(data[str]['id']).addClass("view_btn").appendTo(tr);
                             $("<td></td>").text(data[str]['name']).addClass("view_btn").appendTo(tr);
                             $("<td></td>").text(FormatToUnixtime(data[str]['startTime'])).addClass("view_btn").appendTo(tr);
                             $("<td></td>").text((Math.floor(TimeDiff(now,new Date(data[str]['startTime']))* 0.00001541666/10)*10+1000)+ " 원").addClass("view_btn").appendTo(tr);
-                            $("<td><div class='btn btn-primary btn-user btn-block' id='pay_btn'>결제하기</div></td>").appendTo(tr);
+                            $("<td><div class='btn btn-primary btn-user btn-block' onclick='payFunc()'>결제하기</div></td>").appendTo(tr);
+                            //$("<td><div class='btn btn-primary btn-user btn-block' id='pay_btn'>결제하기</div></td>").addClass("view_btn").appendTo(tr);
 
                             //$("<td><input name='rowCheck' type='checkbox' id='${id}' checked='checked' /></td>").appendTo(tr);
                             //$("<td><button type='button' class='btn btn-primary' id='pay_btn'>결제하기</button></td>").appendTo(tr);
                             entiremoneyVar += Math.floor(TimeDiff(now,new Date(data[str]['startTime']))* 0.00001541666/10)*10+1000;
-                        }
+                        }*/
                     }
                     /*error: function(error) {
                         alert("오류 발생" + error);
                     }*/
                 });
-
-                $(document).on("click", ".view_btn", function() {
-                    var b_no = $(this).parent().attr("name");    //이거 글번호 읽기가 안된다 어케하지
-                    console.log(b_no);
-                    console.log(typeof b_no)
-                    $.ajax({
-                        type: "get",
-                        url: "/bill/pay?id="+b_no,
-                        contentType : "application/json; charset=UTF-8",
-                        dataType : "json",
-                        data: {
-                            b_no: b_no
-                        },
-                        success: function(data) {
-                            console.log(data);
-                            location = "/";
-                        },
-                        error: function(error) {
-                            alert("게시글 읽기 페이지 아직 안만듬" + error);
-                        }
-                    });
-                });
-
 
                 function TimeDiff(unixtime1,unixtime2) {
                     var t1 = new Date(unixtime1);
@@ -175,7 +160,7 @@
             });
         </script>
 
-        <%--<script type="text/javascript">
+        <script type="text/javascript">
             $(document).ready(function(){
                 $("#pay_btn").click(function(){
                     alert("눌림");
@@ -203,7 +188,7 @@
                     });
                 });
             });
-        </script>--%>
+        </script>
 
         <!-- Bootstrap core JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
