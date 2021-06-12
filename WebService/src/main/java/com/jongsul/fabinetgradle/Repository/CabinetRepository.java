@@ -6,6 +6,7 @@ import com.jongsul.fabinetgradle.Domain.Cabinet;
 import com.jongsul.fabinetgradle.Domain.CabinetHistory;
 import com.jongsul.fabinetgradle.Domain.Member;
 
+import java.util.Date;
 import java.util.List;
 
 public interface CabinetRepository {
@@ -16,4 +17,6 @@ public interface CabinetRepository {
     List<String> getAllCabinet();
     List<Cabinet> getOneCabinet(String userID);
     List<Cabinet> getAllCabinet(String userID);
+    Cabinet getOneCabinetById(Long id);
+    void delete(long id);
 }

@@ -1,10 +1,13 @@
 package com.jongsul.fabinetgradle.Controller;
 
 import com.jongsul.fabinetgradle.Mqtt.MqttSubscribeUserID;
+import com.jongsul.fabinetgradle.Service.CabinetService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +15,11 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 @Slf4j
+@RequiredArgsConstructor
 public class HomeController {
+
+    private final CabinetService cabinetService;
+
     @RequestMapping("/")    //첫 화면
     public String home(){
         log.info("home controller");
@@ -73,9 +80,10 @@ public class HomeController {
     }
 
     //결제 api 호출
-    @GetMapping("/bill/pay")
-    public String doPayment(HttpServletRequest request, Model model){
-        log.info("결제 API 페이지 이동");
+    @GetMapping("/bill/pay/{id}")
+    public String PaymentPage(@PathVariable("id") String id, Model model){
+        log.info(id+"번에 대한 결제 API 페이지 이동");
+        model.addAttribute("userInfo",cabinetService.getBill(id));
         return "payment";
     }
 
@@ -84,5 +92,13 @@ public class HomeController {
     public String privatePage(){
         log.info("개인 페이지로 이동");
         return "mypage";
+    }
+
+    //사물함 사용 종료 api 호출 페이지로
+    @GetMapping("/delete/{id}")
+    public String deletePage(@PathVariable("id") long id, Model model){
+        log.info("삭제 페이지로 이동 들어온 번호: "+id);
+        model.addAttribute("num",id);
+        return "stopUsing";
     }
 }

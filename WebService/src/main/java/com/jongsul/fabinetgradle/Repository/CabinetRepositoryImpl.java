@@ -6,8 +6,10 @@ import com.jongsul.fabinetgradle.Domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -46,6 +48,24 @@ public class CabinetRepositoryImpl implements CabinetRepository{
     public List<Cabinet> getAllCabinet(String userID) {
         return em.createQuery("select c from Cabinet c where c.member.loginId=:userID",Cabinet.class)
                 .setParameter("userID",userID).getResultList();
+    }
+
+    @Override
+    public Cabinet getOneCabinetById(Long id) {
+        return em.createQuery("select c from Cabinet c where c.id=:id",Cabinet.class)
+                .setParameter("id",id).getResultList().get(0);
+    }
+
+    @Override
+    @Transactional
+    public void delete(long id) {
+        Date now = new Date();
+        System.out.println("리포지토리 실행");
+        em.createQuery("delete from Cabinet c where c.id=:id",Cabinet.class)
+                .setParameter("id",id);
+        em.createQuery("update Cabinet c set c.endTime = :now where c.id = :id",CabinetHistory.class)
+                .setParameter("now",now)
+                .setParameter("id",id);
     }
 
     @Override

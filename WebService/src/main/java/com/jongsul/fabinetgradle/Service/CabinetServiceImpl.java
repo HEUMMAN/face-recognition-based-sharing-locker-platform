@@ -2,6 +2,7 @@ package com.jongsul.fabinetgradle.Service;
 
 import com.jongsul.fabinetgradle.Config.MemberInformation;
 import com.jongsul.fabinetgradle.DTO.CabinetDTO;
+import com.jongsul.fabinetgradle.DTO.IamportApiDTO;
 import com.jongsul.fabinetgradle.Domain.Board;
 import com.jongsul.fabinetgradle.Domain.Cabinet;
 import com.jongsul.fabinetgradle.Domain.CabinetHistory;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +30,10 @@ public class CabinetServiceImpl implements CabinetService{
     private final CabinetRepository cabinetRepository;
     private final CabinetHistoryRepository cabinetHistoryRepository;
     private final MemberRepository memberRepository;
-
+    private final long ONE_MONTH_SEC = 2592000;
+    private final long ONE_DAY_SEC = 86400;
+    private final long THREE_HOURS_SEC = 10800;
+    private final long ONE_HOUR_SEC = 3600;
 
     @Override
     public List<Cabinet> findAllByID(Member member){
@@ -51,41 +56,48 @@ public class CabinetServiceImpl implements CabinetService{
     }
 
     @Override
+    @Transactional
+    public void deleteCabinetByID(long id) {
+        System.out.println("서비스실행");
+        cabinetRepository.delete(id);
+    }
+
+    @Override
     public String calculateBill(Board board) {
         return null;
     }
 
+    //해당 사물함 사용 요금 계산
     @Override
-    public long getBill(Member member) {
-        /*List<Cabinet> usingCabinet = cabinetRepository.getDate(member); //로그인id(세션id)를 통해 해당 멤버 조회후 멤버로 사물함 사용내용 조회
-        for (Cabinet a : usingCabinet) {
-            System.out.println("현재 사용자가 점유하고있는 사물함: "+a.getName());
+    public IamportApiDTO getBill(String id) {
+        Cabinet cabinet = cabinetRepository.getOneCabinetById(Long.parseLong(id));
+        System.out.println("해당 사용자 시작시간: "+cabinet.getStartTime());
+
+        Calendar getToday = Calendar.getInstance();
+        getToday.setTime(new Date()); //금일 날짜
+        Calendar cmpDate = Calendar.getInstance();
+        cmpDate.setTime(cabinet.getStartTime()); //특정 일자
+
+        long diffSec = (getToday.getTimeInMillis() - cmpDate.getTimeInMillis()) / 1000;
+        System.out.println("초 차이: "+diffSec);
+        long returnMoney = -1;
+        if(diffSec < THREE_HOURS_SEC){
+            returnMoney = 3000;
         }
-        Cabinet tempOne = usingCabinet.get(0);  //한명이 여러개의 사물함 점유시 결제할 것들을 고를 수 있도록 구현해야함
-        long calDate = -1;
-        Date now = new Date();
-        System.out.println("now: "+now);
-        try {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-
-            //시작시간
-            Date FirstDate = format.parse(tempOne.getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-
-            //끝시간(현재시간)
-            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-            Date SecondDate = format.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-
-            System.out.println("시작시간: " + FirstDate);
-            System.out.println("종료시간: "+SecondDate);
-
-            calDate = SecondDate.getTime() - FirstDate.getTime();
-            System.out.println(calDate);    //밀리초단위로 나온다
+        else if(diffSec >= THREE_HOURS_SEC){
+            returnMoney = 3000 + ((diffSec - THREE_HOURS_SEC) / ONE_HOUR_SEC)*500;
         }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        return calDate;*/
-        return 1L;
+        //가격정책
+        //최초 3시간동안은 3000원
+        //이후 한시간마다 500원 추가
+        IamportApiDTO iamportApiDTO = new IamportApiDTO();
+        iamportApiDTO.setEmail(cabinet.getMember().getEmail());
+        iamportApiDTO.setTel(cabinet.getMember().getTel());
+        iamportApiDTO.setName(cabinet.getMember().getName());
+        iamportApiDTO.setMoney(returnMoney);
+        iamportApiDTO.setNum(Long.parseLong(id));
+        System.out.println("지불할 금액: "+returnMoney);
+        return iamportApiDTO;
     }
 
     @Override

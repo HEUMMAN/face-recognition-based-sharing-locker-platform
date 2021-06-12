@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,49 +63,13 @@ public class CabinetController {
         return cabinets;
     }
 
-    @GetMapping("/getMoney")
-    public int getPayMoney(){
-        int ret = money;
-        money = -1;
-        System.out.println("getPayMoney실행: "+money);
-        return ret+55;
-    }
-
-    //결제 api 호출
-    @GetMapping("/bill/pay/{id}")
-    public String PaymentPage(@PathVariable("id") String name){
-        log.info("결제 API 페이지 이동WWWW");
-        log.info("input name: "+name);
-        return "payment";
-    }
-
-    //요금 정산 361482526
-    //ResponseEntity
-    @GetMapping("/bill2")
-    public BillDTO toPayment(Model model, HttpServletRequest request) {
-        log.info("요금 정산");
-        HttpSession session = request.getSession();
-        System.out.println((String) session.getAttribute("loginMemberId"));
-        Member member = memberService.findOne((String) session.getAttribute("loginMemberId"));
-        passedTime = cabinetService.getBill(member);    //이거 전역변수로 했기때문에 초기화 주의해야함
-        //넘어갈때 해당 회원이 지불해야할 돈을 여기서 계산한 후 보낸다
-        // 서비스단에 요금 정산하는 함수 만들자 그거를 여기서도 호출하고 doPayment에서도 호출해야함
-        System.out.println("사용한 시간: " + passedTime * 0.001 + "초");
-        //model.addAttribute("payMoney", passedTime * weight);
-        System.out.println("결제할 금액: " + passedTime * weight);
-
-        bill = new BillDTO();
-        bill.setMoney((int) (passedTime * weight));
-        return bill;
-    }
-
-    @PostMapping("/pay")
-    public void doPayment(HttpServletRequest request, Model model){
-        System.out.println("결제 API 호출");
-        System.out.println("결제할 금액: "+(int)(bill.getMoney()));
-        model.addAttribute("money",(int)(bill.getMoney()));
-        log.info("결제 API 페이지 이동");
-        //return (int)(bill.getMoney());
+    //사물함 사용 중지(삭제)
+    @Transactional
+    @PostMapping("/stopUsing/{id}")
+    public void deleteCabinet(@PathVariable long id) {
+        System.out.println("여까진옴");
+        System.out.println("실행 중지처리할 캐비넷 아이디: "+id);
+        cabinetService.deleteCabinetByID(id);
     }
 
     //선택한 사물함 정보 받아서 DB반영
