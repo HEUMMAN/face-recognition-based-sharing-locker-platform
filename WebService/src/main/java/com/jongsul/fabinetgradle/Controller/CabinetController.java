@@ -42,7 +42,7 @@ public class CabinetController {
     private final MemberInformation memberInformation;
     private int money = -1;
 
-    //사물함 사용시간을 LocalDateTime에서 Date로 바꿨다. 사물함 추가하기 기능 구현하고 확인해보자
+    //사물함 사용시간을 LocalDateTime에서 Date로 바꿈
     @GetMapping("/list")
     public List<Cabinet> showEntireBill(HttpServletRequest request){
         Member member = memberService.findOne(memberInformation.getUserName(request));
