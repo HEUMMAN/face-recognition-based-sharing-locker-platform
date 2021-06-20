@@ -9,7 +9,6 @@ import java.sql.Blob;
 @Setter
 public class RegisterDTO {
 
-    //AJAX측의 변수명과 같아야 받아진다
     private String userName;
     private String userID;
     private String userPW;
