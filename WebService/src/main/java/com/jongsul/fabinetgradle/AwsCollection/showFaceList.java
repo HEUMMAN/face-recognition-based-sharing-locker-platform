@@ -48,7 +48,9 @@ public class showFaceList {
 //            }
             //컨트롤f로 Name 검색해서 이름만 확인하자
             for (Face face : faces) {
+                System.out.println("얼굴정보");
                 System.out.println("Name: "+face.getExternalImageId());
+                System.out.println(face.getFaceId());
             }
             System.out.println("==========================================================");
         } while (listFacesResult != null && listFacesResult.getNextToken() != null);

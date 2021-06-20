@@ -27,11 +27,11 @@ public class addFaceToCollection {
                 .build();
 
         //이 경로의 사진을 컬렉션에 업로드
-        File f = new File("C:\\Users\\lsh97\\Desktop\\lshimg\\sjg.jpg");
+        File f = new File("C:\\Users\\lsh97\\Desktop\\lshimg\\pby.jpg");
         byte[] imageBytes = FileUtils.readFileToByteArray(f);
         ByteBuffer buf = ByteBuffer.wrap(imageBytes);
         Image image = new Image().withBytes(buf);
-        photo = "sjg.jpg";  //이 이름으로 업로르됨
+        photo = "why.jpg";  //이 이름으로 업로르됨
 
 
         IndexFacesRequest indexFacesRequest = new IndexFacesRequest()
