@@ -21,17 +21,4 @@ public class ImageRepositoryImpl implements ImageRepository{
         return em.createQuery("select m from Image m where m.name = :name", Image.class)
                 .setParameter("name",imageName).getResultList();
     }
-
-    /*public Member findOne(String id) {
-        return em.find(Member.class, id);
-    }
-
-    public List<Member> findAll(){
-        return em.createQuery("select m from Member m").getResultList();
-    }
-
-    public List<Member> findByName(String name){
-        return em.createQuery("select m from Member m where m.name = :name", Member.class)
-                .setParameter("name",name).getResultList();
-    }*/
 }
