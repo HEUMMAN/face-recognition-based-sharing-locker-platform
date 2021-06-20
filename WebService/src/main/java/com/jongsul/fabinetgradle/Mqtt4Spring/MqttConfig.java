@@ -1,5 +1,6 @@
 package com.jongsul.fabinetgradle.Mqtt4Spring;
 
+import com.jongsul.fabinetgradle.Domain.Cabinet;
 import com.jongsul.fabinetgradle.Service.CabinetService;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.paho.client.mqttv3.*;
@@ -35,7 +36,7 @@ public class MqttConfig {
     private static final String TOPIC_FILTER_TO_CABINET = "heum/username2";   //사물함으로 publish하는 topic
 
     private static String inputUserName = "";
-    private static String outputCabinetName = "";
+    private static String outputMqttMessage = "";
 
     @Autowired
     private CabinetService cabinetservice;
@@ -80,16 +81,22 @@ public class MqttConfig {
             System.out.println("Payload:" + message.getPayload());
             inputUserName = message.getPayload().toString();
             System.out.println("message.getPayload().toString의 값: "+message.getPayload().toString());
-            String usingCabinetList = cabinetservice.getCabinetName(message.getPayload().toString()).get(0).getName();
-            System.out.println(inputUserName+"가 사용중인 사물함 이름은"+usingCabinetList);
-            outputCabinetName = usingCabinetList;
+            Cabinet findCabinet = cabinetservice.getCabinetName(message.getPayload().toString()).get(0);;
+            if(findCabinet == null){
+                System.out.println("해당 사용자가 사용중인 사물함이 없습니다.");
+            }
+            else{
+                System.out.println(inputUserName+"가 사용중인 사물함 이름은: "+findCabinet.getName());
+                outputMqttMessage = findCabinet.getName();    // A-1-1 이런형식
+                System.out.println("전송할 메시지: "+outputMqttMessage);
+            }
             SendMessage sendMessage = new SendMessage();
             sendMessage.sendToMqtt("NOT_USE_ARG");
+            outputMqttMessage = "";
         };
     }
 
     //publish
-
     @Bean
     public MessageChannel mqttOutboundChannel() {
         return new DirectChannel();
@@ -108,6 +115,13 @@ public class MqttConfig {
     @MessagingGateway(defaultRequestChannel = "mqttOutboundChannel")
     public interface OutboundGateway {
         void sendToMqtt(@Header(MqttHeaders.TOPIC) String topic);
+    }
+
+    public void selfOpenMqttSender(String cabinetName){
+        System.out.println("selfOpenMqttSender 호출");
+        outputMqttMessage = cabinetName;
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.sendToMqtt("NOT_USE_ARG");
     }
 
     public class SendMessage implements OutboundGateway{
@@ -137,7 +151,7 @@ public class MqttConfig {
                     }
                 });
                 client.connect();
-                client.publish( TOPIC_FILTER_TO_CABINET, outputCabinetName.getBytes(StandardCharsets.UTF_8),0, false); // retained
+                client.publish( TOPIC_FILTER_TO_CABINET, outputMqttMessage.getBytes(StandardCharsets.UTF_8),0, false); // retained
                 //client.disconnect();
                 //System.out.println("Publisher disconnect");
             } catch (MqttException e) {
