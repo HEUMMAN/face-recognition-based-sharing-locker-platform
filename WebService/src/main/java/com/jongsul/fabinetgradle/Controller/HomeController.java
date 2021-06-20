@@ -1,9 +1,14 @@
 package com.jongsul.fabinetgradle.Controller;
 
+import com.jongsul.fabinetgradle.Domain.Board;
+import com.jongsul.fabinetgradle.Exception.BoardNotFoundException;
 import com.jongsul.fabinetgradle.Mqtt.MqttSubscribeUserID;
+import com.jongsul.fabinetgradle.Mqtt4Spring.MqttConfig;
+import com.jongsul.fabinetgradle.Service.BoardService;
 import com.jongsul.fabinetgradle.Service.CabinetService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,12 +24,11 @@ import javax.servlet.http.HttpSession;
 public class HomeController {
 
     private final CabinetService cabinetService;
+    private final BoardService boardService;
 
     @RequestMapping("/")    //첫 화면
     public String home(){
         log.info("home controller");
-//        MqttSubscribeUserID mqttSubscribeUserID = new MqttSubscribeUserID();
-//		mqttSubscribeUserID.MqttSub();
         return "index";
     }
 
@@ -47,6 +51,13 @@ public class HomeController {
     public String toCreateAccount(){
         log.info("회원가입 페이지로 이동");
         return "register";
+    }
+
+    //회원가입시 사진등록폼으로
+    @GetMapping("/imageUpload")
+    public String toimageUpload(){
+        log.info("회원가입시 사진등록폼으로 이동");
+        return "imageupload";
     }
 
     //로그인화면으로
@@ -79,6 +90,20 @@ public class HomeController {
         return "bill";
     }
 
+    //개인정보 페이지로
+    @GetMapping("/mypage")
+    public String privatePage(){
+        log.info("개인 페이지로 이동");
+        return "mypage";
+    }
+
+    //수동개방 페이지로 이동
+    @GetMapping("/open")
+    public String openPage(){
+        log.info("수동 개방 페이지로 이동");
+        return "open";
+    }
+
     //결제 api 호출
     @GetMapping("/bill/pay/{id}")
     public String PaymentPage(@PathVariable("id") String id, Model model){
@@ -87,18 +112,33 @@ public class HomeController {
         return "payment";
     }
 
-    //개인정보 페이지로
-    @GetMapping("/mypage")
-    public String privatePage(){
-        log.info("개인 페이지로 이동");
-        return "mypage";
-    }
-
     //사물함 사용 종료 api 호출 페이지로
     @GetMapping("/delete/{id}")
     public String deletePage(@PathVariable("id") long id, Model model){
         log.info("삭제 페이지로 이동 들어온 번호: "+id);
         model.addAttribute("num",id);
         return "stopUsing";
+    }
+
+    //수동 개방
+    @GetMapping("/bill/open/{name}")    //name값으로 사용자 ID가 들어옴
+    public String doOpenMqtt(@PathVariable("name") String name){
+        log.info(name+" 사물함 개방");    //name을 넘겨줘서 Mqtt메시지를 만들어서 전송하면됨 (A-1-1)이렇게
+        MqttConfig sendMessage = new MqttConfig();
+        sendMessage.selfOpenMqttSender(name);
+        return "redirect:/";
+    }
+
+    //게시글 1개 불러오기
+    @GetMapping("/board/{id}")
+    public String showOneBoard(@PathVariable int id, Model model){
+        log.info(id+"번 게시글 불러오기");
+        Board board = boardService.findOne(id);
+        //존재하지 않는 게시물 조회시 예외 상태코드 반환
+        if (board == null) {
+            throw new BoardNotFoundException(String.format("ID[%s] not found",id));
+        }
+        model.addAttribute("board",board);
+        return "board-info";
     }
 }
