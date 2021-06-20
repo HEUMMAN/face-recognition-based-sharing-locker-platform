@@ -52,20 +52,22 @@ public class CabinetRepositoryImpl implements CabinetRepository{
 
     @Override
     public Cabinet getOneCabinetById(Long id) {
+        log.info("getOneCabinetById 실행");
         return em.createQuery("select c from Cabinet c where c.id=:id",Cabinet.class)
                 .setParameter("id",id).getResultList().get(0);
     }
 
     @Override
     @Transactional
-    public void delete(long id) {
-        Date now = new Date();
-        System.out.println("리포지토리 실행");
-        em.createQuery("delete from Cabinet c where c.id=:id",Cabinet.class)
-                .setParameter("id",id);
-        em.createQuery("update Cabinet c set c.endTime = :now where c.id = :id",CabinetHistory.class)
-                .setParameter("now",now)
-                .setParameter("id",id);
+    public void delete(Cabinet target) {
+        log.info("delete repo실행");
+        em.remove(target);
+    }
+
+    @Override
+    public void updateHistory(CabinetHistory cabinetHistory) {
+        log.info("updateHistory repo 실행");
+        em.persist(cabinetHistory);
     }
 
     @Override

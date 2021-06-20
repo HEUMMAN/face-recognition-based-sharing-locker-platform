@@ -18,5 +18,6 @@ public interface CabinetRepository {
     List<Cabinet> getOneCabinet(String userID);
     List<Cabinet> getAllCabinet(String userID);
     Cabinet getOneCabinetById(Long id);
-    void delete(long id);
+    void delete(Cabinet target);
+    void updateHistory(CabinetHistory cabinetHistory);
 }
