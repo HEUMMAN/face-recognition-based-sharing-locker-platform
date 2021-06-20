@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Agency - Start Bootstrap Theme</title>
+        <title>Fabinet 자유게시판</title>
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" /><div class="ui middle aligned center aligned grid"></div>
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
@@ -19,25 +19,21 @@
         <link href="css/styles.css" rel="stylesheet" />
         <!--제이쿼리-->
         <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+        <style>
+            a{
+                color: #000000;
+            }
+        </style>
     </head>
     <body id="page-top">
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
             <div class="container">
-                <a class="navbar-brand js-scroll-trigger" href="#page-top"><img src="assets/img/navbar-logo.svg" alt="" /></a>
+                <%--<a class="navbar-brand js-scroll-trigger" href="#page-top"><img src="assets/img/navbar-logo.svg" alt="" /></a>--%>
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"/>
                     Menu
                     <i class="fas fa-bars ml-1"></i>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav text-uppercase ml-auto">
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#services">Services</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#portfolio">Portfolio</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#team">Team</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Contact</a></li>
-                    </ul>
-                </div>
             </div>
         </nav>
         <!-- Masthead-->
@@ -59,10 +55,10 @@
                         <table class="ui celled table">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>제목</th>
-                                    <th>작성자</th>
-                                    <th>등록일</th>
+                                    <th width="120">번호</th>
+                                    <th width="150">제목</th>
+                                    <th width="50">작성자</th>
+                                    <th width="50">등록일</th>
                                 </tr>
                             </thead>
                             <br>
@@ -105,7 +101,7 @@
         <footer class="footer py-4">
             <div class="container">
                 <div class="row align-items-center">
-                    <div class="col-lg-4 text-lg-left">Copyright © Your Website 2020</div>
+                    <div class="col-lg-4 text-lg-left">Copyright © KPU Fabinet 2021</div>
                     <div class="col-lg-4 my-3 my-lg-0">
                         <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a>
                         <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
@@ -124,7 +120,7 @@
                 $.ajax({
                     type: "get",
                     url: "/board/post",     //이게 /board로 오면 jsp페이지를 반환하고 그 안의 글목록을 반환하려면 /board/post를 따로 해줘야하는데 이래도되는가?
-                    success: function(data) {
+                    /*success: function(data) {
                         console.log(data);
                         for (var str in data) {
                             var tr = $("<tr></tr>").attr("data-id", data[str]['b_no']).appendTo("#list");
@@ -132,7 +128,19 @@
                             $("<td></td>").text(data[str]['title']).addClass("view_btn").appendTo(tr);
                             $("<td></td>").text(data[str]['author']).addClass("view_btn").appendTo(tr);
                             $("<td></td>").text(FormatToUnixtime(data[str]['date'])).addClass("view_btn").appendTo(tr);
-                            //여기에 a태그를 삽입하는 방식으로 일반 웹페이지들은 동작하는듯?
+                        }
+                    },"<td><a class='btn btn-primary btn-user btn-block' href='/bill/open/"+data[ele].name+"'>개방하기</a></td>"+*/
+                    success: function(data) {
+                        console.log(data);
+                        for(var ele in data){
+                            $("#list").append(
+                                "<tr>"+
+                                "<td>"+data[ele].id+"</td>"+
+                                "<td><a href='/board/"+data[ele].id+"'>"+ data[ele].title+"</a></td>"+
+                                "<td>"+data[ele].author+"</td>"+
+                                "<td>"+FormatToUnixtime(data[ele].date)+"</td>"+
+                                "</tr>"
+                            );
                         }
                     },
                     /*error: function(error) {
@@ -160,19 +168,19 @@
                             $('#view_modal').modal('show');
                         },
                         error: function(error) {
-                            alert("게시글 읽기 페이지 아직 안만듬" + error);
+                            //alert("게시글 읽기 페이지 아직 안만듬" + error);
                         }
                     });
                 });
 
                 function FormatToUnixtime(unixtime) {
                     var u = new Date(unixtime);
+                    console.log("u: " + u);
                     return u.getUTCFullYear() +
-                        '-' + ('0' + u.getUTCMonth()).slice(-2) +
-                        '-' + ('0' + u.getUTCDate()).slice(-2)
-                    // ' ' + ('0' + u.getUTCHours()).slice(-2) +
-                    // ':' + ('0' + u.getUTCMinutes()).slice(-2) +
-                    // ':' + ('0' + u.getUTCSeconds()).slice(-2)
+                        '-' + ('0' + (u.getMonth()+1)).slice(-2) +
+                        '-' + ('0' + u.getDate()).slice(-2) +
+                        ' ' + ('0' + u.getHours()).slice(-2) +
+                        ':' + ('0' + u.getMinutes()).slice(-2)
                 };
             });
         </script>

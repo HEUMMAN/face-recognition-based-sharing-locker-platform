@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Agency - Start Bootstrap Theme</title>
+        <title>Fabinet 결제하기</title>
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" /><div class="ui middle aligned center aligned grid"></div>
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
@@ -24,7 +24,7 @@
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
             <div class="container">
-                <a class="navbar-brand js-scroll-trigger" href="#page-top"><img src="assets/img/navbar-logo.svg" alt="" /></a>
+                <%--<a class="navbar-brand js-scroll-trigger" href="#page-top"><img src="assets/img/navbar-logo.svg" alt="" /></a>--%>
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"/>
             </div>
         </nav>
@@ -79,7 +79,7 @@
         <footer class="footer py-4">
             <div class="container">
                 <div class="row align-items-center">
-                    <div class="col-lg-4 text-lg-left">Copyright © FABINET 2021</div>
+                    <div class="col-lg-4 text-lg-left">Copyright © KPU Fabinet 2021</div>
                     <div class="col-lg-4 my-3 my-lg-0">
                         <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a>
                         <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
@@ -114,11 +114,11 @@
                                 "<td>"+data[ele].id+"</td>"+
                                 "<td>"+data[ele].name+"</td>"+
                                 "<td>"+FormatToUnixtime(data[ele].startTime)+"</td>"+
-                                "<td>"+TimeDiff(now,data[ele].startTime)+"</td>"+
+                                "<td>"+TimeDiff(now,data[ele].startTime)+"원"+"</td>"+
                                 "<td><a class='btn btn-primary btn-user btn-block' href='/bill/pay/"+data[ele].id+"'>결제하기</a></td>"+
                                 "</tr>"
 
-                            );console.log(data[ele].startTime);
+                            );
                         }
 
                         /*console.log(data);
@@ -144,18 +144,25 @@
                 function TimeDiff(unixtime1,unixtime2) {
                     var t1 = new Date(unixtime1);
                     var t2 = new Date(unixtime2);
-                    return parseInt(t1-t2);
+                    var diffSec = parseInt((t1-t2)/1000);
+                    var money = -1;
+                    if(diffSec < 10800){
+                        money = 3000;
+                    }
+                    else{
+                        money = 3000 + ((diffSec - 10800)/3600)*500;
+                    }
+                    return Math.floor(money).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 };
 
                 function FormatToUnixtime(unixtime) {
                     var u = new Date(unixtime);
                     console.log("u: " + u);
                     return u.getUTCFullYear() +
-                        '-' + ('0' + u.getMonth()).slice(-2) +
+                        '-' + ('0' + (u.getMonth()+1)).slice(-2) +
                         '-' + ('0' + u.getDate()).slice(-2) +
                         ' ' + ('0' + u.getHours()).slice(-2) +
                         ':' + ('0' + u.getMinutes()).slice(-2)
-                    // ':' + ('0' + u.getUTCSeconds()).slice(-2)
                 };
             });
         </script>

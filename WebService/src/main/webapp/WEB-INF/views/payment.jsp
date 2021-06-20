@@ -26,7 +26,6 @@
         //라는 에러가떠서 못하는중
         //만약 해결한다면 stopUsing페이지로 리다이렉션하는 location.href를 success 블록에 넣자
 
-        location.href = "/delete/"+${userInfo.num};
         var num = '${userInfo.num}';
         var money = '${userInfo.money}';
         var name = '${userInfo.name}';
@@ -43,7 +42,7 @@
             pay_method : 'card',
             merchant_uid : 'merchant_' + new Date().getTime(),
             name : '주문명:결제테스트',
-            amount : 11,
+            amount : money,
             buyer_email : email,
             buyer_name : name,
             buyer_tel : tel,
@@ -58,6 +57,7 @@
                 msg += '카드 승인번호 : ' + rsp.apply_num;
 
                 //사물함 사용종료 실행
+                location.href = "/delete/"+${userInfo.num};
                 //location.href = "/bill/stopUsing/"+${userInfo.num};
             } else {
                 var msg = '결제에 실패하였습니다.';

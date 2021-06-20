@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Agency - Start Bootstrap Theme</title>
+        <title>Fabinet 내정보</title>
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" /><div class="ui middle aligned center aligned grid"></div>
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
@@ -24,7 +24,7 @@
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
             <div class="container">
-                <a class="navbar-brand js-scroll-trigger" href="#page-top"><img src="assets/img/navbar-logo.svg" alt="" /></a>
+                <%--<a class="navbar-brand js-scroll-trigger" href="#page-top"><img src="assets/img/navbar-logo.svg" alt="" /></a>--%>
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"/>
             </div>
         </nav>
@@ -37,7 +37,7 @@
 
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Illustrationskkkkkkkk</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">내 정보</h6>
                 </div>
                 <div class="card-body">
                     <div class="card shadow mb-4">
@@ -46,29 +46,35 @@
                                 <div class="col-lg-4 col-sm-6 mb-2">
                                     <div class="text-center">
                                         <%--세션이름 확인하여 사진가져오기--%>
-                                        <img alt="" src="/getImage" />
+                                        <img alt="" src="/getImage" width="300" height="400"/>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-sm-6 mb-2">
+                                    <div>
+                                        <div align="center">
+                                            <h4>물품보관함 사용법</h4><br>
+                                        </div>
+                                        1. 아래 메뉴에서 본인의 <strong>정면 얼굴</strong>이 또렷하게 나온 사진을 등록한다<br><br>
+                                        2. 카메라 앞에서 눈을 두번 "깜빡깜빡" 한다<br><br>
+                                        3. 혹은 휴대전화를 통해 수동 개방을 한다<br><br>
+                                        4. 사용 종료 후 결제를 하면 마무리!<br><br>
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-sm-6 mb-2">
                                     <div>
-                                        여기에 개인정보 json으로 받아서 보이기
-                                        <p>Add some quality, svg illustrations to your project courtesy of <a
-                                                target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
-                                            constantly updated collection of beautiful svg images that you can use
-                                            completely free and without attribution!</p>
-                                        <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
-                                            unDraw &rarr;</a>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-sm-6 mb-2">
-                                    <div>
-                                        여기에 개인정보 json으로 받아서 보이기2
-                                        <p>Add some quality, svg illustrations to your project courtesy of <a
-                                                target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
-                                            constantly updated collection of beautiful svg images that you can use
-                                            completely free and without attribution!</p>
-                                        <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
-                                            unDraw &rarr;</a>
+                                        <table class="ui celled table">
+                                            <thead>
+                                            <tr>
+                                                <th>이름</th>
+                                                <th>아이디</th>
+                                                <th>전화번호</th>
+                                            </tr>
+                                            </thead>
+                                            <br>
+                                            <tbody id="info">
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -76,27 +82,23 @@
                     </div>
                     <div class="card shadow mb-4">
                         <div class="card-body">
-                            <div class="text-center">
-                                <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
-                                     src="img/undraw_posting_photo.svg" alt="">
-                            </div>
-                            <p>현재 사용중인 사물함 번호 및 현재까지 부가된 요금</p>
-                            <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
-                                unDraw &rarr;</a>
+                            <h4>사진을 선택하고 등록하기 버튼을 누르세요</h4>
+                            <form action="/imgUpload" method="post" enctype="multipart/form-data">
+                                <div class="field" style="margin-bottom: 10px">
+                                    <div>
+                                        <input multiple="multiple" type="file" name="img"/><br>
+                                    </div>
+                                </div>
+
+                                <div class="btn btn-primary btn-user btn-block">
+                                    <button class="btn btn-primary btn-user btn-block" type="submit" name="save">
+                                        사진등록하기
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
 
-
-                    <div class="text-center">
-                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
-                             src="img/undraw_posting_photo.svg" alt="">
-                    </div>
-                    <p>Add some quality, svg illustrations to your project courtesy of <a
-                            target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
-                        constantly updated collection of beautiful svg images that you can use
-                        completely free and without attribution!</p>
-                    <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
-                        unDraw &rarr;</a>
                 </div>
             </div>
 
@@ -122,8 +124,7 @@
                                                 <th>번호</th>
                                                 <th>사물함</th>
                                                 <th>시작시간</th>
-                                                <th>종료시간</th>   <!--몇개 골라서 결제가능하도록-->
-                                                <th>선택</th>
+                                                <th>종료시간</th>
                                             </tr>
                                         </thead>
                                         <br>
@@ -133,9 +134,6 @@
                                 </div>
                 
                                 <div class="ui error message"></div>
-                                <div class="ui middle aligned center aligned grid" style="text-align: right">
-                                    <a href="/bill"><button class="btn btn-primary btn-xl text-uppercase js-scroll-trigger">게시글 작성하기</button></a>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -148,7 +146,7 @@
         <footer class="footer py-4">
             <div class="container">
                 <div class="row align-items-center">
-                    <div class="col-lg-4 text-lg-left">Copyright © FABINET 2021</div>
+                    <div class="col-lg-4 text-lg-left">Copyright © KPU Fabinet 2021</div>
                     <div class="col-lg-4 my-3 my-lg-0">
                         <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a>
                         <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
@@ -164,7 +162,21 @@
 
         <script>
             $(document).ready(function() {
-                var now = new Date();
+                $.ajax({
+                    type: "get",
+                    url: "/mypage/info",
+                    success: function(data) {
+                        console.log(data);
+                        var tr = $("<tr></tr>").attr("data-id", data['b_no']).appendTo("#info");
+                        $("<td></td>").text(data['name']).appendTo(tr);
+                        $("<td></td>").text(data['loginId']).appendTo(tr);
+                        $("<td></td>").text(data['tel']).appendTo(tr);
+                    },
+                    /*error: function(error) {
+                        alert("오류 발생" + error);
+                    }*/
+                });
+
                 $.ajax({
                     type: "get",
                     url: "/mypage/list",
@@ -176,7 +188,6 @@
                             $("<td></td>").text(data[str]['name']).addClass("view_btn").appendTo(tr);
                             $("<td></td>").text(FormatToUnixtime(data[str]['startTime'])).addClass("view_btn").appendTo(tr);
                             $("<td></td>").text(FormatToUnixtime(data[str]['endTime'])).addClass("view_btn").appendTo(tr);
-                            $("<td><input name='rowCheck' type='checkbox' value='${id}'/></td>").appendTo(tr);
                         }
                     },
                     /*error: function(error) {
@@ -190,14 +201,18 @@
                 };
 
                 function FormatToUnixtime(unixtime) {
-                    var u = new Date(unixtime);
-                    console.log("u: " + u);
-                    return u.getUTCFullYear() +
-                        '-' + ('0' + u.getMonth()).slice(-2) +
-                        '-' + ('0' + u.getDate()).slice(-2) +
-                        ' ' + ('0' + u.getHours()).slice(-2) +
-                        ':' + ('0' + u.getMinutes()).slice(-2)
-                    // ':' + ('0' + u.getUTCSeconds()).slice(-2)
+                    if(unixtime == null){
+                        return "";
+                    }
+                    else {
+                        var u = new Date(unixtime);
+                        console.log("u: " + u);
+                        return u.getUTCFullYear() +
+                            '-' + ('0' + (u.getMonth() + 1)).slice(-2) +
+                            '-' + ('0' + u.getDate()).slice(-2) +
+                            ' ' + ('0' + u.getHours()).slice(-2) +
+                            ':' + ('0' + u.getMinutes()).slice(-2)
+                    }
                 };
             });
 
