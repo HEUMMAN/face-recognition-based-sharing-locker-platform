@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.Date;
 
 @RestController
-@ControllerAdvice   //다른 컨트롤러 실행시에도 이 컨트롤러가 꼽사리껴서 실행됨
+@ControllerAdvice
 public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
     
     //모든 예외에 대한 처리를 해주는 메서드
