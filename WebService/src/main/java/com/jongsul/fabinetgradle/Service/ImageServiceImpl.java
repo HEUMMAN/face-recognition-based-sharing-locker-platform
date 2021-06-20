@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true) //트랜섹셔널해줘야함
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService{
 
