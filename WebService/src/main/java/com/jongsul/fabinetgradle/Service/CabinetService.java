@@ -19,5 +19,6 @@ public interface CabinetService {
     List<String> getAllCabinet();
     List<Cabinet> getCabinetName(String userID);
     List<Cabinet> getAllCabinetByName(String userID);
+    List<String> getAvailableCabinet();
     void deleteCabinetByID(long id);
 }

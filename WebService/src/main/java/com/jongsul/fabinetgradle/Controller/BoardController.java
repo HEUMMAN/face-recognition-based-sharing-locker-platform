@@ -27,7 +27,8 @@ public class BoardController {
     public ResponseEntity<List<Board>> showEntireBoard(){
         log.info("게시글 불러오기");
         List<Board> boards = boardService.findBoards();
-        return ResponseEntity.ok(boards);
+        return ResponseEntity
+                .ok(boards);
     }
 
     //게시글 작성 DB등록
@@ -37,6 +38,9 @@ public class BoardController {
                 .path("/{id}")
                 .buildAndExpand(boardService.createBoard(boardDTO,request).getId())
                 .toUri();
-        return ResponseEntity.created(location).build();
+
+        return ResponseEntity
+                .created(location)
+                .build();
     }
 }

@@ -17,9 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -32,6 +30,8 @@ public class CabinetServiceImpl implements CabinetService{
     private final MemberRepository memberRepository;
     private final long THREE_HOURS_SEC = 10800;
     private final long ONE_HOUR_SEC = 3600;
+    private final List<String> CABINET_LIST
+            = Arrays.asList(new String[]{"A-1-1", "A-1-2", "B-1-1", "B-1-2"});
 
     @Override
     public List<Cabinet> findAllByID(Member member){
@@ -51,6 +51,33 @@ public class CabinetServiceImpl implements CabinetService{
     @Override
     public List<Cabinet> getAllCabinetByName(String userID) {
         return cabinetRepository.getAllCabinet(userID);
+    }
+
+    @Override
+    public List<String> getAvailableCabinet() {
+        //A동, B동, C동만 하자
+        //각 동에 1,2,3층있다
+        //각 층에 1~10번 있다
+        //프론트에서 사물함위치를 입력받을때 건물,층,번호로 분리해서 입력받지 말고 그냥 드롭다운 한개로만 받자(사물함예약 페이지의 남는여백에는 요금 정책 설명 텍스트)
+        //db에 존재하는 사물함 사용 내역들을 List<Cabinet>으로 전부 가져오기
+        //가져온 리스트에서 name속성을 추출(ex. B-2-9)
+        //존재할수있는 모든 사물함위치들을 한곳에 미리 선언(A-1-1 ~ A-1-10, A-2-1 ~ A-2-1 이런식으로 쭉 따로 선언해두자)
+        //선언해둔 집단에서 가져온 name속성을 뺀 결과(사용가능한 곳들)를 json으로 전송
+        //사물함 위치를 입력받을때 건물,층,번호를 따로 받는것이 아닌 완성형태로 선택하는 드롭박스1개로 통일하자(A-1-1, A-1-2, A-1-3... 이런식으로 길게)
+        List<String> availableCabinet = new ArrayList<>();
+        List<String> usingCabinet = cabinetRepository.getAllCabinet();
+
+        //deep copy
+        for(String cabinetName : CABINET_LIST){
+            availableCabinet.add(cabinetName);
+        }
+        //차집합
+        availableCabinet.removeAll(usingCabinet);
+        log.info("사용가능자리");
+        for (String availableCabinetName : availableCabinet) {
+            log.info(availableCabinetName);
+        }
+        return availableCabinet;
     }
 
     @Override

@@ -34,13 +34,15 @@ public class MypageController {
     public ResponseEntity<List<CabinetHistory>> userCabinetList(HttpServletRequest request){
         String loginID = memberInformation.getUserName(request);
         List<CabinetHistory> allCabinet = cabinetHistoryService.getAllCabinet(loginID);
-        return ResponseEntity.ok(allCabinet);
+        return ResponseEntity
+                .ok(allCabinet);
     }
 
     @GetMapping("/info")
-    public Member userInfo(HttpServletRequest request){
+    public ResponseEntity<Member> userInfo(HttpServletRequest request){
         String loginID = memberInformation.getUserName(request);
         Member findMember = memberService.findOne(loginID);
-        return findMember;
+        return ResponseEntity
+                .ok(findMember);
     }
 }
