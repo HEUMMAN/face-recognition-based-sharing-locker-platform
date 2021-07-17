@@ -7,6 +7,7 @@ import paho.mqtt.client as mqtt
 from imutils import face_utils
 from keras.models import load_model
 import time
+import pyautogui as msg
 
 IMG_SIZE = (34, 26)
 detector = dlib.get_frontal_face_detector()
@@ -26,11 +27,13 @@ client = boto3.client('rekognition', region_name='ap-northeast-2', aws_access_ke
                         aws_secret_access_key=secretAccessKey) #내 aws 클라이언트 정보다
 count = 0 #얼굴 인식에 딜레이를 주기 위한 카운트
 cap = cv2.VideoCapture(0) #웹캠에서 영상을 읽어온다
-cap.set(3, 640) #WIDTH
-cap.set(4, 480) #HEIGHT
+#cap.set(3, 480) #WIDTH
+#cap.set(4, 320) #HEIGHT
+cap.set(4, 720) #WIDTH
+cap.set(3, 480) #HEIGHT
 face_cascade = cv2.CascadeClassifier('haarcascade_frontface.xml')#얼굴 인식 캐스케이드 파일을 읽는다
 blinkCount = 0
-
+timeOut = 0
 def crop_eye(img, eye_points):
     IMG_SIZE = (34, 26)
 
@@ -61,11 +64,11 @@ def faceDetect():
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)  # 얼굴이 인식되었다면, 얼굴에 사각형을 출력한다
         winname = 'fabinet'
         cv2.namedWindow(winname)
-        cv2.moveWindow(winname, 40, 30)
-        cv2.imshow(winname, frame)
+        cv2.moveWindow(winname, 0, 0)
+        #cv2.imshow(winname, frame)
         cv2.imwrite('image.jpg', frame)  # 인식된 얼굴 프레임을 image.jpg라는 파일명으로 저장한다.
         img = cv2.imread('image.jpg')  # image.jpg파일을 불러온다
-        key = cv2.waitKey(2000) & 0xFF
+        #key = cv2.waitKey(2000) & 0xFF
         is_success, im_buf_arr = cv2.imencode(".jpg", img)  # 이미지 서치를 위해 파일을 binary 형태로 이미지를 읽는다
         byte_im = im_buf_arr.tobytes()  # array를 raw data형태로 바꿔준다(이미지 서치를 위해 필요)
         response = client.search_faces_by_image(CollectionId=collectionId,
@@ -83,17 +86,26 @@ def faceDetect():
                 print('Similarity: ' + "{:.2f}".format(match['Similarity']) + "%")  # 유사도를 출력한다
                 print(match['Face']['ExternalImageId'])  # 사진명을 출력한다(핵심부분)
                 username = match['Face']['ExternalImageId']
-                username = username.replace(".jpg", "")
+                username = username.split('.')
+                username = username[0]
+                #username = username.replace(".jpg", "")
+                server = "3.34.255.198"
+                mclient = mqtt.Client()
+                mclient.connect(server, 1883)
                 mclient.publish("heum/username", username)
+                print(username)
+                msg.m2()
                 cv2.destroyAllWindows()
                 print
         else:
             print("not matched")
+            msg.m3()
             cv2.destroyAllWindows()
             # msgBox1() 얼굴 미등록 인물
     except:
-        count = 0
+        #count = 0
         print("error")
+        msg.m4()
         cv2.destroyAllWindows()
 
 while(True):
@@ -101,16 +113,20 @@ while(True):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
     cv2.imshow("fabinet", frame)
-    if(len(faces) == 1): #인식된 얼굴 갯수가 하나일 경우
+    winname = 'fabinet'
+    cv2.namedWindow(winname)
+    cv2.moveWindow(winname, 0, 0)
+    if(len(faces) >= 1): #인식된 얼굴 갯수가 하나일 경우
         count = count + 1
         for (x, y, w, h) in faces:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)  # 얼굴이 인식되었다면, 얼굴에 사각형을 출력한다
-    if(count == 49):
+    if(count == 29):
         timeOut = time.time() + 5
-    if(count > 50):
+        msg.m1()
+        count += 1
+    if(count >= 30):
         try:
             frame2 = cv2.resize(frame, dsize=(0, 0), fx=0.5, fy=0.5)
-
             img = frame.copy()
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             faces = detector(gray)
@@ -131,8 +147,8 @@ while(True):
                 pred_l = model.predict(eye_input_l)
                 pred_r = model.predict(eye_input_r)
 
-                state_l = 'O %.1f' if pred_l > 0.001 else '- %.1f'
-                state_r = 'O %.1f' if pred_r > 0.001 else '- %.1f'
+                state_l = 'O %.1f' if pred_l > 0.05 else '- %.1f'
+                state_r = 'O %.1f' if pred_r > 0.05 else '- %.1f'
 
                 state_l = state_l % pred_l
                 state_r = state_r % pred_r
@@ -145,7 +161,7 @@ while(True):
                 cv2.putText(img, state_l, tuple(eye_rect_l[0:2]), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (51, 0, 255), 2)
                 cv2.putText(img, state_r, tuple(eye_rect_r[0:2]), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (51, 0, 255), 2)
                 cv2.namedWindow('result')
-                cv2.moveWindow('result', 40, 30)
+                cv2.moveWindow('result', 0, 0)
                 cv2.imshow('result', img)
                 if state_r.startswith("-") or state_l.startswith("-"):
                     blinkCount = blinkCount + 1
@@ -156,7 +172,7 @@ while(True):
                 blinkCount = 0
                 cv2.destroyAllWindows()
 
-            if time.time() > timeOut:
+            elif time.time() > timeOut:
                 count = 0
                 blinkCount = 0
                 cv2.destroyAllWindows()
