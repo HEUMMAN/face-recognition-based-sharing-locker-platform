@@ -81,7 +81,7 @@ public class MqttConfig {
             System.out.println("Payload:" + message.getPayload());
             inputUserName = message.getPayload().toString();
             System.out.println("message.getPayload().toString의 값: "+message.getPayload().toString());
-            Cabinet findCabinet = cabinetservice.getCabinetName(message.getPayload().toString()).get(0);;
+            Cabinet findCabinet = cabinetservice.getCabinetName(message.getPayload().toString()).get(0);
             if(findCabinet == null){
                 System.out.println("해당 사용자가 사용중인 사물함이 없습니다.");
             }

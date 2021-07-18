@@ -42,6 +42,11 @@ public class ImageServiceImpl implements ImageService{
     @Override
     @Transactional
     public String upload(MultipartFile file, HttpServletRequest request) throws SQLException {
+
+        System.out.println("file.getName() = " + file.getName());
+        System.out.println("file.getOriginalFilename() = " + file.getOriginalFilename());
+        System.out.println("file.getContentType() = " + file.getContentType());
+
         //DB에 이미지 저장
         Image image = new Image();
         //session = request.getSession();
@@ -74,7 +79,13 @@ public class ImageServiceImpl implements ImageService{
         com.amazonaws.services.rekognition.model.Image image4Collection =
                 new com.amazonaws.services.rekognition.model.Image().withBytes(buf);
 
-        String photoName = userID+".jpg";  //이 이름으로 업로르됨
+        //.뒤의 확장자만 추출
+//        String[] fileOriginalName = file.getOriginalFilename().split("\\.");
+        String[] fileOriginalName = file.getContentType().split("\\/");
+        String fileNameExtension = "."+fileOriginalName[1];
+
+        String photoName = userID+fileNameExtension;  //사용자ID에 사진 확장자명이 추가된 형태로 저장됨
+        log.info("컬렉션에 저장되는 이름: "+photoName);
 
         IndexFacesRequest indexFacesRequest = new IndexFacesRequest()
                 .withImage(image4Collection)

@@ -3,12 +3,10 @@ package com.jongsul.fabinetgradle.Service;
 import com.jongsul.fabinetgradle.Config.MemberInformation;
 import com.jongsul.fabinetgradle.DTO.BoardDTO;
 import com.jongsul.fabinetgradle.Domain.Board;
-import com.jongsul.fabinetgradle.Domain.Member;
 import com.jongsul.fabinetgradle.Repository.BoardRepository;
 import com.jongsul.fabinetgradle.Repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
